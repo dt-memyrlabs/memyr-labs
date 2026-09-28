@@ -5,1205 +5,578 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
   <link rel="icon" href="data:," />
-  <title>Memyr Labs — Agentic coordination</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&amp;family=Space+Grotesk:wght@300;400;500;600&amp;display=swap" rel="stylesheet" />
+  <title>Memyr Labs - Products and agentic experiences</title>
   <style>
     :root {
       color-scheme: light dark;
-      --paper: #f3f0e8;
-      --paper-deep: #e9e4d8;
-      --ink: #20211f;
-      --muted: #65645d;
-      --rule: #c8c2b5;
-      --blueprint: #787a75;
-      --navy: #182b3a;
-      --gold: #aa7928;
-      --gold-soft: #e8d7b2;
-      --cyan: #087e97;
-      --cyan-soft: #b8dbe2;
-      --amber: #a85d12;
-      --amber-soft: #e8ca9f;
-      --dark: #15242b;
-      --focus: #9d5b12;
-      --max: 1120px;
+      --paper: #eee9df;
+      --paper-2: #e5dfd3;
+      --paper-3: #d6cfc2;
+      --ink: #181815;
+      --muted: #5e5a52;
+      --faint: rgba(24,24,21,.15);
+      --hairline: rgba(24,24,21,.34);
+      --amber: #d58a1f;
+      --amber-dark: #9a5d0f;
+      --amber-wash: rgba(213,138,31,.13);
+      --screen: #20201d;
+      --screen-ink: #f0ebe1;
+      --good: var(--amber);
+      --page-pad: clamp(1.2rem, 4vw, 4.8rem);
+      --spine: clamp(2.6rem, 5vw, 5rem);
+      --spring: cubic-bezier(.2,1.55,.35,1);
     }
-
     @media (prefers-color-scheme: dark) {
       :root {
-        --paper: #171916;
-        --paper-deep: #20231e;
-        --ink: #ebe8df;
-        --muted: #aaa99f;
-        --rule: #41443e;
-        --blueprint: #999c95;
-        --navy: #a9c3d1;
-        --gold: #d3a454;
-        --gold-soft: #574727;
-        --cyan: #59bdd1;
-        --cyan-soft: #234d56;
-        --amber: #e0a15d;
-        --amber-soft: #5b3b20;
-        --dark: #c0d3d9;
-        --focus: #e0b765;
+        --paper: #181817;
+        --paper-2: #211f1b;
+        --paper-3: #302d27;
+        --ink: #eee9df;
+        --muted: #aaa398;
+        --faint: rgba(238,233,223,.12);
+        --hairline: rgba(238,233,223,.28);
+        --amber: #e0a041;
+        --amber-dark: #f2bb68;
+        --amber-wash: rgba(224,160,65,.13);
+        --screen: #0e0e0d;
+        --screen-ink: #eee9df;
       }
     }
-
     * { box-sizing: border-box; }
-
-    html {
-      background: var(--paper);
-      scroll-behavior: smooth;
-    }
-
+    html { background: var(--paper); scroll-behavior: auto; }
     body {
       margin: 0;
       min-width: 320px;
-      overflow-x: hidden;
-      background:
-        linear-gradient(90deg, transparent 0, transparent calc(100% - 1px), color-mix(in srgb, var(--ink) 2%, transparent) 100%),
-        var(--paper);
+      overflow-x: clip;
+      background: var(--paper);
       color: var(--ink);
-      font-family: "IBM Plex Sans", sans-serif;
-      font-size: 17px;
-      line-height: 1.65;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 400;
       text-rendering: optimizeLegibility;
     }
-
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+      opacity: .22;
+      background-image:
+        radial-gradient(circle at 17% 23%, currentColor .45px, transparent .65px),
+        radial-gradient(circle at 73% 64%, currentColor .35px, transparent .55px),
+        radial-gradient(circle at 42% 88%, currentColor .4px, transparent .6px);
+      background-size: 7px 7px, 9px 9px, 11px 11px;
+      mix-blend-mode: multiply;
+    }
+    @media (prefers-color-scheme: dark) { body::after { mix-blend-mode: screen; opacity: .08; } }
     a { color: inherit; }
+    button { font: inherit; }
+    .mono { font-family: "JetBrains Mono", monospace; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
-    .page {
-      width: min(100% - 40px, var(--max));
-      margin: 0 auto;
+    .spine {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: var(--spine);
+      z-index: 8;
+      border-right: 1px solid var(--hairline);
+      background: color-mix(in srgb, var(--paper) 92%, transparent);
+      pointer-events: none;
+    }
+    .spine::before {
+      content: "";
+      position: absolute;
+      left: 49%;
+      top: 0;
+      bottom: 0;
+      border-left: 1px dashed var(--faint);
+    }
+    .spine-markers { position: absolute; inset: 0; }
+    .spine-marker {
+      position: absolute;
+      left: 50%;
+      translate: -50% -50%;
+      width: 9px;
+      height: 9px;
+      background: var(--paper);
+      border: 1px solid var(--ink);
+      transition: background .45s var(--spring), transform .45s var(--spring);
+    }
+    .spine-marker.active { background: var(--amber); transform: rotate(45deg) scale(1.15); border-color: var(--amber-dark); }
+    .spine-marker:nth-child(1){top:8%}.spine-marker:nth-child(2){top:25%}.spine-marker:nth-child(3){top:44%}.spine-marker:nth-child(4){top:66%}.spine-marker:nth-child(5){top:85%}.spine-marker:nth-child(6){top:96%}
+
+    .route-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .route-layer svg { width: 100%; height: 100%; display: block; }
+    .route-shadow { fill:none; stroke: var(--paper); stroke-width: 10; opacity:.8; vector-effect:non-scaling-stroke; }
+    .route-path {
+      fill: none;
+      stroke: var(--amber);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vector-effect: non-scaling-stroke;
+      filter: saturate(.9);
+    }
+    @supports (animation-timeline: scroll()) {
+      .route-path {
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+        animation: draw-route 1s both;
+        animation-timeline: scroll(root block);
+      }
+      @keyframes draw-route { to { stroke-dashoffset: 0; } }
     }
 
-    .masthead {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 24px;
-      padding: 29px 0 22px;
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .wordmark {
-      margin: 0;
-      font-family: "Source Serif 4", serif;
-      font-size: 20px;
-      font-weight: 600;
-      letter-spacing: -0.015em;
-    }
-
-    .folio {
-      color: var(--muted);
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 11px;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-    }
-
+    main { position: relative; isolation: isolate; }
+    section { position: relative; z-index: 2; padding-left: calc(var(--spine) + var(--page-pad)); padding-right: var(--page-pad); }
     .hero {
+      min-height: 88dvh;
       display: grid;
-      grid-template-columns: minmax(0, 1.55fr) minmax(250px, .65fr);
-      gap: clamp(48px, 9vw, 120px);
-      align-items: end;
-      min-height: 560px;
-      padding: 110px 0 92px;
-      border-bottom: 1px solid var(--rule);
+      align-content: center;
+      padding-top: 3.5rem;
+      padding-bottom: 3.5rem;
     }
-
-    h1, h2, h3, p { margin-top: 0; }
-
-    h1 {
-      max-width: 820px;
-      margin-bottom: 0;
-      font-family: "Source Serif 4", serif;
-      font-size: clamp(46px, 6.2vw, 78px);
-      font-weight: 500;
-      line-height: .99;
-      letter-spacing: -.045em;
+    .hero h1 {
+      margin: 0;
+      max-width: 15ch;
+      font-size: clamp(3.25rem, 7.8vw, 8.8rem);
+      line-height: .91;
+      letter-spacing: -.068em;
+      font-weight: 400;
       text-wrap: balance;
     }
-
-    .studio-line {
-      max-width: 360px;
-      margin: 0 0 4px;
-      color: var(--muted);
-      font-size: 18px;
-      line-height: 1.55;
+    .hero h1 em { font-style: normal; color: var(--amber-dark); }
+    .hero-bottom {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(17rem, 31rem);
+      align-items: end;
+      gap: 3rem;
+      margin-top: clamp(3rem, 8vh, 6.5rem);
     }
+    .hero-rule { border-top: 1px solid var(--ink); min-height: 1.5rem; position: relative; }
+    .hero-rule::after { content:""; position:absolute; top:-4px; right:0; width:7px; height:7px; background:var(--amber); }
+    .hero-bottom p { margin:0; font-size:clamp(1.1rem,1.65vw,1.55rem); line-height:1.35; letter-spacing:-.02em; }
 
     .chapter {
-      display: grid;
-      grid-template-columns: 110px minmax(0, 650px);
-      gap: 30px;
-      padding: 110px 0 120px;
+      min-height: 150vh;
+      border-top: 1px solid var(--hairline);
     }
-
-    .chapter-marker {
-      padding-top: 7px;
-      color: var(--muted);
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 11px;
-      line-height: 1.4;
-      letter-spacing: .08em;
+    .chapter-head {
+      position: relative;
+      padding-top: clamp(3rem, 5vw, 5.5rem);
+      padding-bottom: clamp(2.5rem, 4.5vw, 4.8rem);
+    }
+    .chapter-index {
+      position: absolute;
+      left: calc(var(--spine) * -0.82);
+      top: clamp(4.2rem, 8vw, 8.2rem);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font: 500 .66rem/1 "JetBrains Mono", monospace;
+      letter-spacing: .15em;
       text-transform: uppercase;
+      color: var(--muted);
     }
-
-    .chapter h2 {
-      margin-bottom: 28px;
-      font-family: "Source Serif 4", serif;
-      font-size: clamp(35px, 4.5vw, 54px);
-      font-weight: 500;
-      line-height: 1.08;
-      letter-spacing: -.035em;
-      text-wrap: balance;
+    .chapter-head h2 {
+      margin: 0;
+      max-width: 18ch;
+      font-size: clamp(2.7rem, 6vw, 6.2rem);
+      font-weight: 400;
+      letter-spacing: -.055em;
+      line-height: .96;
     }
-
-    .chapter p {
-      margin-bottom: 1.1em;
-      font-size: clamp(18px, 2vw, 21px);
-      line-height: 1.62;
-    }
-
-    .chapter p:last-child { margin-bottom: 0; }
-
-    .problem {
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .problem .lead::first-letter {
-      float: left;
-      margin: .07em .13em 0 0;
-      font-family: "Source Serif 4", serif;
-      font-size: 4.2em;
-      line-height: .72;
-    }
-
-    .product-section {
-      padding: 112px 0 132px;
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .product-intro {
+    .chapter-head .lead { margin: 1.6rem 0 0; max-width: 41ch; font-size: clamp(1.12rem,1.65vw,1.5rem); line-height:1.4; }
+    .chapter-grid {
       display: grid;
-      grid-template-columns: minmax(260px, .85fr) minmax(0, 1.15fr);
-      gap: clamp(42px, 8vw, 110px);
+      grid-template-columns: minmax(17rem, .78fr) minmax(30rem, 1.22fr);
+      gap: clamp(2rem, 7vw, 8rem);
       align-items: start;
-      margin-bottom: 72px;
     }
-
-    .product-name {
+    .steps { padding: 5vh 0 18vh; }
+    .step {
+      min-height: 32vh;
       display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 26px;
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: .035em;
+      flex-direction: column;
+      justify-content: center;
+      border-top: 1px solid var(--hairline);
+      opacity: .34;
+      transition: opacity .55s var(--spring);
     }
+    .step:last-child { border-bottom: 1px solid var(--hairline); }
+    .step.active { opacity: 1; }
+    .step p { margin: 0; max-width: 38ch; font-size: clamp(1.22rem,1.8vw,1.72rem); line-height:1.45; letter-spacing:-.024em; }
+    .step p + p { margin-top: 1.4rem; }
+    .stage-wrap { position: sticky; top: 8vh; height: 84vh; display:grid; place-items:center; }
+    .stage { width:100%; min-height: min(66vh, 640px); position:relative; }
 
-    .product-name::before {
-      width: 22px;
-      height: 2px;
-      background: var(--accent);
-      content: "";
+    /* Gift8 */
+    .gift8 .chapter-grid { grid-template-columns: minmax(30rem,1.25fr) minmax(17rem,.75fr); }
+    .gift8 .steps { order:2; }
+    .gift8 .stage-wrap { order:1; }
+    .gift-stage { border:1px solid var(--ink); background:var(--paper-2); overflow:hidden; }
+    .gift-stage::before { content:""; position:absolute; inset:0; background:linear-gradient(var(--faint) 1px, transparent 1px),linear-gradient(90deg,var(--faint) 1px,transparent 1px); background-size:38px 38px; opacity:.4; }
+    .shard { position:absolute; border:1px solid var(--ink); background:var(--paper); padding:.7rem .85rem; font:500 .72rem/1.25 "JetBrains Mono",monospace; box-shadow: 5px 5px 0 var(--amber-wash); transition:opacity .5s var(--spring),transform .75s var(--spring); }
+    .shard-a{top:14%;left:8%;transform:rotate(-6deg)} .shard-b{top:37%;right:7%;transform:rotate(4deg)} .shard-c{bottom:17%;left:14%;transform:rotate(3deg)}
+    .gift-stage[data-state="1"] .shard,.gift-stage[data-state="2"] .shard,.gift-stage[data-state="3"] .shard{opacity:0;transform:translateY(18px) scale(.93)}
+    .phone-thread { position:absolute; width:min(74%,410px); left:50%; top:50%; transform:translate(-50%,-45%) scale(.88); border:1px solid var(--ink); background:var(--paper); padding:1rem; opacity:0; transition:opacity .6s var(--spring),transform .8s var(--spring); box-shadow:12px 12px 0 var(--amber-wash); }
+    .gift-stage[data-state="1"] .phone-thread,.gift-stage[data-state="2"] .phone-thread,.gift-stage[data-state="3"] .phone-thread{opacity:1;transform:translate(-50%,-50%) scale(1)}
+    .thread-top { display:flex;align-items:center;justify-content:space-between;padding:.3rem .2rem 1rem;border-bottom:1px solid var(--hairline);font:500 .72rem/1 "JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.08em; }
+    .total { color:var(--amber-dark); }
+    .messages { display:grid; gap:.75rem; padding-top:1rem; min-height:300px; }
+    .message { max-width:84%; padding:.7rem .8rem; border:1px solid var(--hairline); font-size:.88rem; line-height:1.35; opacity:0; transform:translateY(14px); transition:opacity .55s var(--spring),transform .65s var(--spring); }
+    .message:nth-child(even){justify-self:end;background:var(--amber-wash);border-color:var(--amber)}
+    .gift-stage[data-state="1"] .message:nth-child(-n+4),.gift-stage[data-state="2"] .message,.gift-stage[data-state="3"] .message{opacity:1;transform:none}
+    .gift-stage[data-state="1"] .message:nth-child(2),.gift-stage[data-state="1"] .message:nth-child(4),.gift-stage[data-state="2"] .message:nth-child(2),.gift-stage[data-state="2"] .message:nth-child(4),.gift-stage[data-state="2"] .message:nth-child(6),.gift-stage[data-state="3"] .message:nth-child(2),.gift-stage[data-state="3"] .message:nth-child(4),.gift-stage[data-state="3"] .message:nth-child(6){transition-delay:.08s}
+    .gift8 .step { min-height:26vh; }
+    .gift8 .steps { padding-bottom:10vh; }
+    .receipt { font-family:"JetBrains Mono",monospace; font-size:.72rem; }
+    .thread-footer { border-top:1px solid var(--hairline);padding-top:.8rem;display:flex;justify-content:space-between;font:500 .68rem/1 "JetBrains Mono",monospace;color:var(--muted); }
+
+    /* notanATS */
+    .nats { min-height:118vh; }
+    .nats .chapter-head { padding-bottom:2.5rem; }
+    .nats .chapter-grid { min-height:min(82vh,760px);align-items:center; }
+    .nats .steps { padding:0;align-self:center;border-bottom:1px solid var(--hairline); }
+    .nats .step { min-height:auto;padding:1.3rem 0;opacity:.36; }
+    .nats .step.active { opacity:1; }
+    .nats .step p { font-size:clamp(1.03rem,1.35vw,1.28rem); }
+    .nats-stage { display:grid;grid-template-rows:auto 1fr;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:1rem 0; }
+    .illustrative { font:500 .62rem/1 "JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);display:flex;justify-content:space-between; }
+    .calibration { margin-top:1.35rem;display:grid;grid-template-columns:1fr 1.1fr;gap:1rem;align-items:center;transform-origin:top center;transition:opacity .45s var(--spring),transform .6s var(--spring); }
+    .bubble { border:1px solid var(--hairline);padding:1rem;font-size:.8rem;line-height:1.45; }
+    .rubric { position:relative;border:1px solid var(--ink);padding:1rem;background:var(--paper-2); }
+    .rubric-row { display:flex;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--faint);padding:.45rem 0;font:500 .68rem/1.2 "JetBrains Mono",monospace; }
+    .lock-stamp { position:absolute;right:.7rem;top:.7rem;border:2px solid var(--amber-dark);color:var(--amber-dark);padding:.32rem .45rem;font:600 .7rem/1 "JetBrains Mono",monospace;letter-spacing:.08em;opacity:0;transform:rotate(-8deg) scale(1.35);transition:opacity .25s var(--spring),transform .5s var(--spring); }
+    .nats-stage[data-state="1"] .lock-stamp,.nats-stage[data-state="2"] .lock-stamp,.nats-stage[data-state="3"] .lock-stamp{opacity:1;transform:rotate(-4deg) scale(1)}
+    .nats-stage[data-state="1"] .calibration,.nats-stage[data-state="2"] .calibration,.nats-stage[data-state="3"] .calibration { opacity:.26;transform:translateY(-8px) scale(.97); }
+    .pool { margin-top:1.25rem;border-top:1px solid var(--ink); }
+    .applicant { display:grid;grid-template-columns:2.2rem 1fr 4rem 5.5rem;align-items:center;gap:.6rem;padding:.68rem 0;border-bottom:1px solid var(--hairline);font-size:.78rem;transition:transform .65s var(--spring),opacity .45s var(--spring),background .45s var(--spring); }
+    .applicant .num,.applicant .score,.applicant .status{font-family:"JetBrains Mono",monospace}.applicant .score{text-align:right;font-size:1rem;opacity:0;transform:translateY(7px);transition:opacity .35s var(--spring),transform .45s var(--spring)}.applicant .status{text-align:right;font-size:.6rem;text-transform:uppercase;color:var(--muted);opacity:0;transition:opacity .35s var(--spring),color .35s ease}
+    .applicant:nth-child(2){transform:translateY(72px)}.applicant:nth-child(3){transform:translateY(-36px)}.applicant:nth-child(4){transform:translateY(36px)}.applicant:nth-child(5){transform:translateY(-72px)}
+    .nats-stage[data-state="2"] .applicant,.nats-stage[data-state="3"] .applicant{transform:none}
+    .nats-stage[data-state="2"] .score,.nats-stage[data-state="3"] .score{opacity:1;transform:none}
+    .nats-stage[data-state="2"] .applicant:nth-child(2) .score,.nats-stage[data-state="3"] .applicant:nth-child(2) .score{transition-delay:.08s}.nats-stage[data-state="2"] .applicant:nth-child(3) .score,.nats-stage[data-state="3"] .applicant:nth-child(3) .score{transition-delay:.16s}.nats-stage[data-state="2"] .applicant:nth-child(4) .score,.nats-stage[data-state="3"] .applicant:nth-child(4) .score{transition-delay:.24s}.nats-stage[data-state="2"] .applicant:nth-child(5) .score,.nats-stage[data-state="3"] .applicant:nth-child(5) .score{transition-delay:.32s}
+    .nats-stage[data-state="3"] .applicant { background:var(--amber-wash); }
+    .nats-stage[data-state="3"] .status { color:var(--amber-dark);opacity:1; }
+
+    /* Foculet */
+    .foculet { min-height:138vh; }
+    .foculet .chapter-head { padding-bottom:1.5rem; }
+    .foculet .steps { padding:2vh 0 12vh; }
+    .foculet .step { min-height:40vh;gap:1.25rem; }
+    .foculet .step p { font-size:clamp(1.06rem,1.45vw,1.35rem); }
+    .foculet-stage { display:grid;align-content:center; }
+    .desk { display:grid;grid-template-columns:1.25fr .88fr;gap:1.3rem;align-items:end;position:relative; }
+    .dump-monitor { transform-origin:left bottom;transition:opacity .6s var(--spring),transform .8s var(--spring); }
+    .foculet-stage[data-state="1"] .dump-monitor { opacity:.7;transform:translateX(-12%) scale(.78); }
+    .foculet-stage[data-state="2"] .dump-monitor { opacity:1;transform:none; }
+    .monitor { position:relative;border:5px solid var(--ink);background:var(--screen);min-height:320px;padding:1rem;color:var(--screen-ink);box-shadow:0 10px 0 -5px var(--hairline); }
+    .monitor::after { content:"";position:absolute;left:42%;right:42%;bottom:-36px;height:32px;background:var(--ink); }
+    .monitor-label { display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.22);padding-bottom:.65rem;font:500 .65rem/1 "JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.1em;color:#c9c2b6; }
+    .screen-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:.65rem;margin-top:.75rem; }
+    .task { min-height:92px;border:1px solid rgba(255,255,255,.32);padding:.65rem;background:#292925;transition:transform .72s var(--spring),opacity .45s var(--spring),background .3s ease; transform-origin:center; }
+    .task-num { font:600 1.4rem/1 "JetBrains Mono",monospace;color:var(--amber); }
+    .task-lines { display:grid;gap:5px;margin-top:.7rem; }
+    .task-lines i { display:block;height:3px;background:rgba(255,255,255,.22); }.task-lines i:nth-child(2){width:68%}
+    .main-monitor .task:not(.current) { opacity:0;pointer-events:none;position:absolute; }
+    .dump-monitor { min-height:270px; }
+    .dump-monitor .task { opacity:0;transform:translate(-70%,20%) scale(.65);cursor:pointer; }
+    .dump-monitor .task:hover,.dump-monitor .task:focus-visible { transform:scale(1.16) rotate(-1deg);background:#34342e;z-index:3;outline:2px solid var(--amber);outline-offset:2px; }
+    .foculet-stage[data-state="1"] .dump-monitor .task,
+    .foculet-stage[data-state="2"] .dump-monitor .task { opacity:1;transform:none; }
+    .foculet-stage[data-state="1"] .dump-monitor .task:nth-child(1),.foculet-stage[data-state="2"] .dump-monitor .task:nth-child(1){transition-delay:.08s}
+    .foculet-stage[data-state="1"] .dump-monitor .task:nth-child(2),.foculet-stage[data-state="2"] .dump-monitor .task:nth-child(2){transition-delay:.2s}
+    .foculet-stage[data-state="1"] .dump-monitor .task:nth-child(3),.foculet-stage[data-state="2"] .dump-monitor .task:nth-child(3){transition-delay:.32s}
+    .foculet-stage.returned .dump-monitor .task:first-child { opacity:0;transform:translate(-160%,0) scale(.75); }
+    .foculet-stage.returned .main-monitor .task.current { opacity:0; }
+    .main-return { position:absolute;inset:3rem 1rem 1rem;opacity:0;transform:scale(.78);transition:opacity .5s var(--spring),transform .7s var(--spring); }
+    .foculet-stage.returned .main-return { opacity:1;transform:none; }
+    .desk-note { margin-top:3.2rem;display:flex;justify-content:space-between;font:500 .65rem/1.4 "JetBrains Mono",monospace;color:var(--muted); }
+
+    /* Works */
+    .works { min-height:58vh;padding-top:clamp(4rem,8vw,7rem);padding-bottom:clamp(4.5rem,9vw,8rem);border-top:1px solid var(--hairline); }
+    .wire-register { max-width:980px;margin-left:auto;border:1px dashed var(--hairline);padding:clamp(1.4rem,4vw,3.6rem);position:relative;filter:grayscale(1); }
+    .wire-register::before,.wire-register::after { content:"";position:absolute;width:16px;height:16px;border-color:var(--ink); }
+    .wire-register::before{left:-1px;top:-1px;border-left:2px solid;border-top:2px solid}.wire-register::after{right:-1px;bottom:-1px;border-right:2px solid;border-bottom:2px solid}
+    .wire-label { margin:0 0 2.2rem;font:500 .68rem/1 "JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--muted); }
+    .wire-register h2 { margin:0;max-width:26ch;font-size:clamp(2rem,4.8vw,4.9rem);line-height:1;letter-spacing:-.045em;font-weight:400; }
+    .wire-tabs { margin-top:3rem;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;opacity:.36; }
+    .wire-tabs i { display:block;height:2.8rem;border:1px solid var(--ink); }
+
+    .closer { min-height:80dvh;display:grid;align-content:center;padding-top:4.5rem;padding-bottom:4.5rem;border-top:1px solid var(--hairline); }
+    .closer h2 { margin:0;max-width:10ch;font-size:clamp(4rem,11vw,11rem);line-height:.82;letter-spacing:-.075em;font-weight:400; }
+    .closer-route { margin:clamp(2rem,6vw,5rem) 0;display:flex;align-items:center;gap:0; }
+    .closer-route span { width:11px;height:11px;background:var(--amber);transform:rotate(45deg);flex:0 0 auto; }
+    .closer-route i { display:block;height:3px;background:var(--amber);flex:1;position:relative; }
+    .closer-route i::after { content:"";position:absolute;right:0;top:-4px;width:10px;height:10px;border-top:3px solid var(--amber);border-right:3px solid var(--amber);transform:rotate(45deg); }
+    .contact { display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:end;border-top:1px solid var(--ink);padding-top:1.2rem; }
+    .contact p { margin:0;font-size:clamp(1rem,1.5vw,1.25rem); }
+    .contact a { font:500 clamp(.85rem,1.3vw,1rem)/1 "JetBrains Mono",monospace;text-decoration-thickness:1px;text-underline-offset:.35rem;color:var(--amber-dark); }
+    .contact a:focus-visible { outline:2px solid var(--amber);outline-offset:6px; }
+
+    @media (max-width: 900px) {
+      :root { --spine: 2.3rem; --page-pad: 1.1rem; }
+      .hero { min-height:82dvh;padding-top:3rem;padding-bottom:2.25rem; }
+      .hero h1 { font-size:clamp(3rem,13vw,6rem);max-width:11ch; }
+      .hero-bottom { grid-template-columns:1fr;gap:1.3rem;margin-top:2.8rem; }
+      .chapter { min-height:auto; }
+      .chapter-head { padding-top:3.4rem;padding-bottom:2.4rem; }
+      .chapter-index { left:-1.75rem; }
+      .chapter-grid,.gift8 .chapter-grid { display:flex;flex-direction:column;gap:1.5rem; }
+      .gift8 .stage-wrap,.gift8 .steps { order:initial; }
+      .stage-wrap { position:relative;top:auto;height:auto;display:block;width:100%; }
+      .stage { min-height:500px; }
+      .steps { padding:0 0 3rem;width:100%; }
+      .step { min-height:auto;padding:2rem 0;opacity:1; }
+      .gift8 .step,.foculet .step { min-height:auto; }
+      .gift8 .steps,.foculet .steps { padding:0 0 3rem; }
+      .gift-stage { min-height:540px; }
+      .nats .chapter-grid { min-height:auto; }
+      .nats .stage-wrap { order:1; }
+      .nats .steps { order:2; }
+      .nats-stage { min-height:590px; }
+      .foculet-stage { min-height:540px; }
+      .desk { grid-template-columns:1fr;gap:3.5rem; }
+      .monitor { min-height:230px; }
+      .dump-monitor { min-height:245px; }
+      .foculet .stage-wrap { order:2; }
+      .foculet .steps { order:1; }
+      .works { min-height:auto;padding-top:4rem;padding-bottom:5rem; }
+      .closer { min-height:72dvh;padding-top:4rem;padding-bottom:4rem; }
+      .wire-tabs { grid-template-columns:repeat(3,1fr); }.wire-tabs i:nth-child(n+4){display:none}
+      .contact { grid-template-columns:1fr;align-items:start; }
+      .route-path { stroke-width:2; }
     }
-
-    .product-section h2 {
-      margin-bottom: 0;
-      font-family: "Source Serif 4", serif;
-      font-size: clamp(37px, 5vw, 60px);
-      font-weight: 500;
-      line-height: 1.05;
-      letter-spacing: -.038em;
-      text-wrap: balance;
+    @media (max-width: 520px) {
+      .hero h1 { font-size:clamp(2.65rem,13.5vw,4.1rem);letter-spacing:-.06em; }
+      .chapter-head h2 { font-size:clamp(2.35rem,11vw,3.6rem); }
+      .chapter-head .lead { font-size:1.08rem; }
+      .stage { min-height:470px; }
+      .phone-thread { width:86%; }
+      .messages { min-height:250px;gap:.55rem; }
+      .message { padding:.58rem .68rem;font-size:.82rem; }
+      .calibration { grid-template-columns:1fr;gap:.65rem;margin-top:1rem; }
+      .nats-stage { min-height:650px; }
+      .applicant { grid-template-columns:1.8rem 1fr 3.2rem; }
+      .applicant .status { grid-column:2 / 4;text-align:left; }
+      .desk-note { flex-direction:column;gap:.5rem; }
+      .closer h2 { font-size:clamp(3.8rem,19vw,6.5rem); }
     }
-
-    .product-copy {
-      padding-top: 39px;
-    }
-
-    .product-copy p {
-      margin-bottom: 1.05em;
-      font-size: clamp(17px, 1.75vw, 20px);
-      line-height: 1.63;
-    }
-
-    .product-copy p:last-child { margin-bottom: 0; }
-
-    .gift8 { --accent: var(--gold); --accent-soft: var(--gold-soft); }
-    .notanats { --accent: var(--cyan); --accent-soft: var(--cyan-soft); }
-    .foculet { --accent: var(--amber); --accent-soft: var(--amber-soft); }
-    .musechrome { --accent: var(--blueprint); --accent-soft: var(--paper-deep); }
-
-    .source-link {
-      margin-left: auto;
-      color: var(--accent);
-      font-size: 10px;
-      letter-spacing: .055em;
-      text-decoration-color: color-mix(in srgb, var(--accent) 50%, transparent);
-      text-underline-offset: 4px;
-      text-transform: uppercase;
-    }
-
-    .source-link:hover { text-decoration-color: currentColor; }
-    .source-link:focus-visible {
-      outline: 2px solid var(--focus);
-      outline-offset: 4px;
-    }
-
-    .status-label {
-      margin-left: auto;
-      padding: 4px 7px 3px;
-      border: 1px dashed var(--blueprint);
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-    }
-
-    .musechrome .product-intro,
-    .musechrome .process-figure {
-      filter: saturate(.15);
-    }
-
-    .process-figure {
-      margin: 0;
-      border-top: 1px solid var(--rule);
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .figure-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 17px 0 12px;
-    }
-
-    .figure-title {
-      margin: 0;
-      color: var(--muted);
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-    }
-
-    .toggle {
-      display: inline-grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2px;
-      padding: 3px;
-      border: 1px solid var(--rule);
-      border-radius: 999px;
-      background: color-mix(in srgb, var(--paper-deep) 65%, transparent);
-    }
-
-    .toggle button {
-      min-width: 76px;
-      padding: 7px 13px;
-      border: 0;
-      border-radius: 999px;
-      background: transparent;
-      color: var(--muted);
-      font: 500 11px/1 "IBM Plex Mono", monospace;
-      letter-spacing: .035em;
-      cursor: pointer;
-    }
-
-    .toggle button[aria-pressed="true"] {
-      background: var(--ink);
-      color: var(--paper);
-    }
-
-    .toggle button:focus-visible {
-      outline: 2px solid var(--focus);
-      outline-offset: 3px;
-    }
-
-    .gear-canvas {
-      display: block;
-      width: 100%;
-      height: auto;
-      min-height: 300px;
-      overflow: visible;
-    }
-
-    .foculet-canvas { min-height: 340px; }
-
-    .monitor-frame {
-      fill: var(--paper-deep);
-      stroke: var(--blueprint);
-      stroke-width: 2;
-      vector-effect: non-scaling-stroke;
-    }
-
-    .monitor-screen {
-      fill: color-mix(in srgb, var(--paper) 92%, var(--amber-soft));
-      stroke: var(--rule);
-      stroke-width: 1;
-      vector-effect: non-scaling-stroke;
-    }
-
-    .monitor-stand,
-    .monitor-base,
-    .parking-route {
-      fill: none;
-      stroke: var(--blueprint);
-      stroke-width: 1.5;
-      vector-effect: non-scaling-stroke;
-    }
-
-    .parking-route {
-      stroke-dasharray: 4 7;
-      opacity: .6;
-    }
-
-    .monitor-label,
-    .task-caption {
-      fill: var(--muted);
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 11px;
-      letter-spacing: .04em;
-      text-anchor: middle;
-      text-transform: uppercase;
-    }
-
-    .task-window,
-    .thumb-frame {
-      fill: var(--paper);
-      stroke: var(--accent);
-      stroke-width: 1.4;
-      vector-effect: non-scaling-stroke;
-    }
-
-    .task-window-header,
-    .thumb-header { fill: color-mix(in srgb, var(--amber-soft) 68%, var(--paper)); }
-
-    .task-number {
-      fill: var(--accent);
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 18px;
-      font-weight: 500;
-      text-anchor: middle;
-    }
-
-    .task-title {
-      fill: var(--ink);
-      font-family: "IBM Plex Sans", sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      text-anchor: middle;
-    }
-
-    .task-thumb { cursor: pointer; }
-    .task-thumb:hover .thumb-frame,
-    .task-thumb:focus-visible .thumb-frame { stroke-width: 2.5; }
-    .task-thumb:focus-visible { outline: none; }
-    .task-thumb.arriving { animation: thumb-arrive .62s cubic-bezier(.2,.8,.3,1); }
-
-    .chaos-window:nth-of-type(odd) { animation: pile-glitch-a 1.05s steps(4, end) infinite; }
-    .chaos-window:nth-of-type(even) { animation: pile-glitch-b 1.3s steps(5, end) infinite; }
-
-    @keyframes thumb-arrive {
-      0% { opacity: .12; transform: translate(-38px, 9px) scale(1.18); }
-      70% { opacity: 1; transform: translate(3px, -1px) scale(.98); }
-      100% { opacity: 1; transform: none; }
-    }
-    @keyframes pile-glitch-a {
-      0%, 100% { transform: translate(-2px, 1px) rotate(-.8deg); }
-      46% { transform: translate(3px, -2px) rotate(1.3deg); }
-      74% { transform: translate(-1px, 3px) rotate(-.4deg); }
-    }
-    @keyframes pile-glitch-b {
-      0%, 100% { transform: translate(2px, -2px) rotate(.9deg); }
-      38% { transform: translate(-3px, 2px) rotate(-1.1deg); }
-      72% { transform: translate(1px, 1px) rotate(.3deg); }
-    }
-
-    .datum-line {
-      fill: none;
-      stroke: var(--rule);
-      stroke-width: 1;
-      stroke-dasharray: 3 8;
-      vector-effect: non-scaling-stroke;
-    }
-
-    .dimension-line {
-      fill: none;
-      stroke: color-mix(in srgb, var(--blueprint) 50%, transparent);
-      stroke-width: .75;
-      vector-effect: non-scaling-stroke;
-    }
-
-    .gear-outline {
-      fill: color-mix(in srgb, var(--paper) 86%, transparent);
-      stroke: var(--blueprint);
-      stroke-width: 1.35;
-      vector-effect: non-scaling-stroke;
-    }
-
-    .gear-ring, .gear-hub {
-      fill: none;
-      stroke: var(--blueprint);
-      stroke-width: 1;
-      vector-effect: non-scaling-stroke;
-    }
-
-    .product-gear .gear-outline {
-      fill: var(--accent-soft);
-      stroke: var(--accent);
-      stroke-width: 1.7;
-    }
-
-    .product-gear .gear-ring,
-    .product-gear .gear-hub { stroke: var(--accent); }
-
-    .stage-label {
-      fill: var(--ink);
-      font-family: "IBM Plex Sans", sans-serif;
-      font-size: 15px;
-      font-weight: 500;
-      text-anchor: middle;
-    }
-
-    .brand-label {
-      fill: var(--accent);
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: .02em;
-      text-anchor: middle;
-    }
-
-    .index-label {
-      fill: var(--muted);
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 9px;
-      text-anchor: middle;
-    }
-
-    .gap-marker {
-      fill: none;
-      stroke: var(--accent);
-      stroke-width: 1;
-      stroke-dasharray: 3 7;
-      opacity: 0;
-      vector-effect: non-scaling-stroke;
-    }
-
-    .gap-cross {
-      stroke: var(--accent);
-      stroke-width: 1;
-      opacity: 0;
-      vector-effect: non-scaling-stroke;
-    }
-
-    .mechanism,
-    .gap-marker,
-    .gap-cross {
-      transition: opacity 320ms ease;
-    }
-
-    .process-figure.with .rotor.clockwise { animation: spin-cw 15s linear infinite; }
-    .process-figure.with .rotor.counter { animation: spin-ccw 15s linear infinite; }
-
-    .process-figure.without .product-gear .mechanism { opacity: 0; }
-    .process-figure.without .product-gear .brand-label { opacity: 0; }
-    .process-figure.without .product-gear .gap-marker,
-    .process-figure.without .product-gear .gap-cross { opacity: .72; }
-    .process-figure.without .assembly:not(.product-gear) .mechanism {
-      filter: grayscale(1);
-      opacity: .58;
-    }
-    .process-figure.without .assembly:nth-of-type(1) .mechanism { transform: translate(-10px, -9px) rotate(-5deg); }
-    .process-figure.without .assembly:nth-of-type(2) .mechanism { transform: translate(7px, 12px) rotate(7deg); }
-    .process-figure.without .assembly:nth-of-type(5) .mechanism { transform: translate(-7px, 11px) rotate(-8deg); }
-    .process-figure.without .assembly:nth-of-type(6) .mechanism { transform: translate(10px, -8px) rotate(6deg); }
-    .process-figure.without .assembly:nth-of-type(odd) .jitter-shell { animation: grind-a 1.15s steps(4, end) infinite; }
-    .process-figure.without .assembly:nth-of-type(even) .jitter-shell { animation: grind-b 1.35s steps(5, end) infinite; }
-    .process-figure.without .rotor.clockwise { animation: stutter-cw 3.6s steps(7, end) infinite; }
-    .process-figure.without .rotor.counter { animation: stutter-ccw 4.1s steps(8, end) infinite; }
-
-    .process-figure.work-in-progress .assembly .mechanism {
-      filter: grayscale(1);
-      opacity: .68;
-    }
-    .process-figure.work-in-progress .assembly:nth-of-type(1) .mechanism { transform: translate(-11px, 8px) rotate(-6deg); }
-    .process-figure.work-in-progress .assembly:nth-of-type(2) .mechanism { transform: translate(8px, -12px) rotate(8deg); }
-    .process-figure.work-in-progress .assembly:nth-of-type(3) .mechanism { transform: translate(-5px, 13px) rotate(-5deg); }
-    .process-figure.work-in-progress .assembly:nth-of-type(4) .mechanism { transform: translate(12px, 5px) rotate(7deg); }
-    .process-figure.work-in-progress .assembly:nth-of-type(5) .mechanism { transform: translate(-9px, -8px) rotate(-8deg); }
-    .process-figure.work-in-progress .assembly:nth-of-type(6) .mechanism { transform: translate(7px, 11px) rotate(5deg); }
-    .process-figure.work-in-progress .assembly:nth-of-type(odd) .jitter-shell { animation: grind-a .9s steps(4, end) infinite; }
-    .process-figure.work-in-progress .assembly:nth-of-type(even) .jitter-shell { animation: grind-b 1.05s steps(5, end) infinite; }
-    .process-figure.work-in-progress .rotor.clockwise { animation: stutter-cw 3.1s steps(7, end) infinite; }
-    .process-figure.work-in-progress .rotor.counter { animation: stutter-ccw 3.4s steps(8, end) infinite; }
-    .process-figure.work-in-progress .product-gear .gap-marker,
-    .process-figure.work-in-progress .product-gear .gap-cross { opacity: .38; }
-
-    @keyframes spin-cw {
-      from { transform: rotate(var(--phase)); }
-      to { transform: rotate(calc(var(--phase) + 360deg)); }
-    }
-    @keyframes spin-ccw {
-      from { transform: rotate(var(--phase)); }
-      to { transform: rotate(calc(var(--phase) - 360deg)); }
-    }
-    @keyframes stutter-cw {
-      0% { transform: rotate(0deg); }
-      30% { transform: rotate(48deg); }
-      43% { transform: rotate(38deg); }
-      70% { transform: rotate(82deg); }
-      100% { transform: rotate(104deg); }
-    }
-    @keyframes stutter-ccw {
-      0% { transform: rotate(10deg); }
-      28% { transform: rotate(-32deg); }
-      41% { transform: rotate(-22deg); }
-      75% { transform: rotate(-70deg); }
-      100% { transform: rotate(-92deg); }
-    }
-    @keyframes grind-a {
-      0%, 100% { transform: translate(-2px, 1px) rotate(-1deg); }
-      45% { transform: translate(1px, -2px) rotate(1.2deg); }
-      70% { transform: translate(0, 2px) rotate(-.4deg); }
-    }
-    @keyframes grind-b {
-      0%, 100% { transform: translate(1px, -1px) rotate(.7deg); }
-      40% { transform: translate(-2px, 2px) rotate(-1.3deg); }
-      76% { transform: translate(2px, 0) rotate(.4deg); }
-    }
-
-    .rotor, .jitter-shell {
-      transform-box: fill-box;
-      transform-origin: center;
-    }
-
-    .figure-note {
-      display: flex;
-      justify-content: space-between;
-      gap: 24px;
-      padding: 13px 0 17px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .figure-note span:first-child { max-width: 650px; }
-
-    .figure-key {
-      flex: 0 0 auto;
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 10px;
-      letter-spacing: .03em;
-    }
-
-    .closing {
-      display: grid;
-      grid-template-columns: 110px minmax(0, 790px);
-      gap: 30px;
-      padding: 132px 0 148px;
-    }
-
-    .closing blockquote {
-      margin: 0;
-      font-family: "Source Serif 4", serif;
-      font-size: clamp(40px, 5.5vw, 68px);
-      font-weight: 500;
-      line-height: 1.04;
-      letter-spacing: -.04em;
-      text-wrap: balance;
-    }
-
-    footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      padding: 28px 0 36px;
-      border-top: 1px solid var(--rule);
-      color: var(--muted);
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 11px;
-    }
-
-    footer a {
-      text-decoration-color: var(--rule);
-      text-underline-offset: 4px;
-    }
-
-    footer a:hover { color: var(--ink); }
-
-    @media (max-width: 760px) {
-      .page { width: min(100% - 32px, var(--max)); }
-      .masthead { padding-top: 22px; }
-      .hero {
-        grid-template-columns: 1fr;
-        gap: 42px;
-        min-height: auto;
-        padding: 78px 0 72px;
-      }
-      h1 { font-size: clamp(42px, 13vw, 58px); }
-      .studio-line { max-width: 520px; }
-      .chapter,
-      .closing {
-        grid-template-columns: 1fr;
-        gap: 24px;
-      }
-      .chapter { padding: 82px 0 88px; }
-      .product-section { padding: 84px 0 96px; }
-      .product-intro {
-        grid-template-columns: 1fr;
-        gap: 24px;
-        margin-bottom: 50px;
-      }
-      .product-copy { padding-top: 0; }
-      .product-name { margin-bottom: 20px; }
-      .figure-head {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .toggle { align-self: stretch; }
-      .toggle button { min-width: 0; }
-      .gear-canvas { min-height: 420px; }
-      .figure-note { flex-direction: column; gap: 8px; }
-      .closing { padding: 95px 0 105px; }
-      footer {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 8px;
-      }
-    }
-
     @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      .rotor, .jitter-shell, .task-thumb, .chaos-window { animation: none !important; }
-      .mechanism, .gap-marker, .gap-cross { transition: none; }
+      html { scroll-behavior:auto; }
+      *,*::before,*::after { animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important; }
+      .route-path { stroke-dasharray:none;stroke-dashoffset:0;animation:none; }
+      .step { opacity:1; }
+      .shard { opacity:0; }
+      .phone-thread { opacity:1;transform:translate(-50%,-50%) scale(1); }
+      .message { opacity:1;transform:none; }
+      .lock-stamp { opacity:1;transform:rotate(-4deg); }
+      .calibration { opacity:.3;transform:translateY(-8px) scale(.97); }
+      .applicant { transform:none!important;background:var(--amber-wash); }
+      .applicant .score,.applicant .status { opacity:1;transform:none;color:var(--amber-dark); }
+      .dump-monitor { opacity:1!important;transform:none!important; }
+      .dump-monitor .task { opacity:1;transform:none; }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <header class="masthead">
-      <p class="wordmark">Memyr Labs</p>
-      <span class="folio">Product studio</span>
-    </header>
+  <aside class="spine" aria-hidden="true"><div class="spine-markers"><i class="spine-marker active"></i><i class="spine-marker"></i><i class="spine-marker"></i><i class="spine-marker"></i><i class="spine-marker"></i><i class="spine-marker"></i></div></aside>
+  <main>
+    <div class="route-layer" aria-hidden="true">
+      <svg viewBox="0 0 1200 7000" preserveAspectRatio="none">
+        <path class="route-shadow" pathLength="1" d="M95 0 C94 280 235 310 205 620 C175 930 72 1000 110 1270 C150 1540 380 1350 310 1650 C250 1910 85 1860 115 2190 C145 2500 310 2480 275 2760 C235 3060 100 3020 128 3360 C156 3670 380 3540 315 3880 C260 4200 96 4140 126 4500 C150 4820 290 4890 265 5180 C240 5470 119 5460 132 5820 C140 6200 150 6530 210 7000"/>
+        <path class="route-path" pathLength="1" d="M95 0 C94 280 235 310 205 620 C175 930 72 1000 110 1270 C150 1540 380 1350 310 1650 C250 1910 85 1860 115 2190 C145 2500 310 2480 275 2760 C235 3060 100 3020 128 3360 C156 3670 380 3540 315 3880 C260 4200 96 4140 126 4500 C150 4820 290 4890 265 5180 C240 5470 119 5460 132 5820 C140 6200 150 6530 210 7000"/>
+      </svg>
+    </div>
 
-    <main>
-      <section class="hero" aria-labelledby="thesis">
-        <h1 id="thesis">Agentic coordination you can tap into.</h1>
-        <p class="studio-line">Memyr Labs builds products and agentic experiences that make the process flow easily.</p>
-      </section>
+    <section class="hero" data-chapter="0">
+      <h1>Memyr Labs is a product studio. We build products and agentic experiences that make the process <em>flow easily.</em></h1>
+      <div class="hero-bottom">
+        <div class="hero-rule" aria-hidden="true"></div>
+        <p>Three products. Each one takes a process that gets in the way and gets it out of the way.</p>
+      </div>
+    </section>
 
-      <section class="chapter problem" aria-labelledby="problem-title">
-        <div class="chapter-marker">01 / The gap</div>
-        <div>
-          <h2 id="problem-title">The work is rarely the problem.</h2>
-          <p class="lead">Everyday processes glitch in the space between one step and the next. One person has context. Another has the next task. Nobody owns the distance between them.</p>
-          <p>The pieces are there. The coordination is missing.</p>
-        </div>
-      </section>
-
-      <section class="product-section gift8" aria-labelledby="gift8-title">
-        <div class="product-intro">
-          <div>
-            <div class="product-name">Gift8</div>
-            <h2 id="gift8-title">Group gifting, automated.</h2>
-          </div>
-          <div class="product-copy">
-            <p>Gift8 is the consumer experience for group gifting. It keeps the occasion, contributions and next action moving together, without turning a group chat into a project plan.</p>
-            <p>A Gift8 API key works with Muse and other agents, such as Grok. The first handshake explains Gift8. Then Gift8 asks the agent for the details it needs. The person can stay in the conversation they already use.</p>
-          </div>
-        </div>
-
-        <figure class="process-figure with" data-process="gift8" data-state="with">
-          <div class="figure-head">
-            <h3 class="figure-title">Figure 01 — The gifting chain</h3>
-            <div class="toggle" role="group" aria-label="Show the gifting process with or without Gift8">
-              <button type="button" data-state-button="without" aria-pressed="false">Without</button>
-              <button type="button" data-state-button="with" aria-pressed="true">With</button>
+    <section class="chapter gift8" data-chapter="1">
+      <header class="chapter-head">
+        <span class="chapter-index">Gift8 / The conversation is the venue.</span>
+        <h2>Group gifting, automated.</h2>
+        <p class="lead">Organizing a group gift means chasing people for money and guessing what to buy. Gift8 runs the whole thing in chat. The organizer sets it up, everyone contributes, and Gift8 pings the organizer as contributions land.</p>
+      </header>
+      <div class="chapter-grid">
+        <div class="stage-wrap">
+          <div class="stage gift-stage" data-state="0" aria-label="A group gift consolidating from scattered messages into one live conversation">
+            <div class="shard shard-a">DM / I can send later</div><div class="shard shard-b">SHEET / MAYA / ?</div><div class="shard shard-c">who paid?</div>
+            <div class="phone-thread">
+              <div class="thread-top"><span>Birthday gift</span><span class="total">$120 / $160</span></div>
+              <div class="messages">
+                <div class="message">I started a gift for Sam. Contribute here.</div>
+                <div class="message receipt">Maya paid $40</div>
+                <div class="message">We are at $80. Two people left.</div>
+                <div class="message receipt">Noah paid $40</div>
+                <div class="message">Want ideas? I can suggest a few options.</div>
+                <div class="message receipt">Total confirmed / $160</div>
+              </div>
+              <div class="thread-footer"><span>4 contributions</span><span>organizer notified</span></div>
             </div>
           </div>
-          <svg class="gear-canvas" role="img" aria-labelledby="gift8-gear-title gift8-gear-desc">
-            <title id="gift8-gear-title">Gifting process gear chain</title>
-            <desc id="gift8-gear-desc">Six interlocking gears move from occasion to delivery. Gift8 coordinates the middle of the chain.</desc>
-          </svg>
-          <figcaption class="figure-note">
-            <span class="state-description" aria-live="polite">Every gear is engaged. The handoffs keep moving.</span>
-            <span class="figure-key">Occasion → Delivered</span>
-          </figcaption>
-        </figure>
-      </section>
+        </div>
+        <div class="steps">
+          <div class="step active" data-state="0"><p>The question starts in five places.</p></div>
+          <div class="step" data-state="1"><p>The whole group moves into one thread.</p></div>
+          <div class="step" data-state="2"><p>Want ideas? Ask. Gift8 suggests options and shows them only after you confirm.</p></div>
+          <div class="step" data-state="3"><p>The core is free. No fees, no subscriptions.</p></div>
+        </div>
+      </div>
+    </section>
 
-      <section class="product-section notanats" aria-labelledby="notanats-title">
-        <div class="product-intro">
-          <div>
-            <div class="product-name">notanATS</div>
-            <h2 id="notanats-title">Screen for the experience you need to build your team.</h2>
-          </div>
-          <div class="product-copy">
-            <p>notanATS is screening infrastructure. It holds the hiring manager’s definition of the work, screens applicants against it and moves the right people to the interview.</p>
-            <p>Your own agents and apps can tap into that process through the API. The screening layer becomes part of the system you already operate, rather than another queue someone has to watch.</p>
+    <section class="chapter nats" data-chapter="2">
+      <header class="chapter-head">
+        <span class="chapter-index">notanATS / The bar doesn't move.</span>
+        <h2>Interviews on your calendar. You did 20 minutes.</h2>
+      </header>
+      <div class="chapter-grid">
+        <div class="steps">
+          <div class="step active" data-state="0"><p>One 20-minute calibration chat about the role. notanATS pulls out what good looks like and locks it in before the first applicant arrives.</p></div>
+          <div class="step" data-state="1"><p>An AI interviewer then screens every applicant against that bar, scored 0-100. No humans in between.</p></div>
+          <div class="step" data-state="2"><p>Top applicants advance to interviews - automatically, or by your hand. Every applicant hears back with where they stood in the pool.</p></div>
+        </div>
+        <div class="stage-wrap">
+          <div class="stage nats-stage" data-state="0" aria-label="Illustrative hiring calibration and applicant scoring model">
+            <div class="illustrative"><span>illustrative data</span><span>pool / 04</span></div>
+            <div>
+              <div class="calibration">
+                <div class="bubble">What would make you trust someone with the work on day one?</div>
+                <div class="rubric"><div class="lock-stamp">LOCKED</div><div class="rubric-row"><span>Owns ambiguity</span><span>40</span></div><div class="rubric-row"><span>Builds the system</span><span>35</span></div><div class="rubric-row"><span>Explains tradeoffs</span><span>25</span></div></div>
+              </div>
+              <div class="pool">
+                <div class="applicant"><span class="num">01</span><span>Applicant 04</span><strong class="score">92</strong><span class="status">answer sent</span></div>
+                <div class="applicant"><span class="num">02</span><span>Applicant 01</span><strong class="score">84</strong><span class="status">answer sent</span></div>
+                <div class="applicant"><span class="num">03</span><span>Applicant 03</span><strong class="score">71</strong><span class="status">answer sent</span></div>
+                <div class="applicant"><span class="num">04</span><span>Applicant 02</span><strong class="score">58</strong><span class="status">answer sent</span></div>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <figure class="process-figure without" data-process="notanats" data-state="without">
-          <div class="figure-head">
-            <h3 class="figure-title">Figure 02 — The hiring chain</h3>
-            <div class="toggle" role="group" aria-label="Show the hiring process with or without notanATS">
-              <button type="button" data-state-button="without" aria-pressed="true">Without</button>
-              <button type="button" data-state-button="with" aria-pressed="false">With</button>
+    <section class="chapter foculet" data-chapter="3">
+      <header class="chapter-head"><span class="chapter-index">Foculet / Context stays visible.</span></header>
+      <div class="chapter-grid">
+        <div class="steps">
+          <div class="step active" data-state="1"><p>Foculet parks what you're not using, so it's there when you need it.</p><p>Foculet parks the last few tasks you were working on so you can get back to them easily.</p></div>
+          <div class="step" data-state="2"><p>You mostly work on one monitor. When you switch tasks, Foculet keeps the last one on a second monitor instead of letting it disappear. It manages the last few tasks you were working on and holds them there for you to return to.</p><p>Click a parked task and it comes back to your main monitor. Foculet holds on to the context while you move between tasks, so picking something back up does not start with finding it again.</p></div>
+        </div>
+        <div class="stage-wrap">
+          <div class="stage foculet-stage" data-state="1">
+            <div class="desk">
+              <div class="monitor main-monitor"><div class="monitor-label"><span>Main</span><span>working</span></div><div class="screen-grid"><button class="task current" type="button" tabindex="-1"><span class="task-num">04</span><span class="task-lines"><i></i><i></i></span></button></div><button class="task main-return" type="button" tabindex="-1"><span class="task-num">01</span><span class="task-lines"><i></i><i></i></span></button></div>
+              <div class="monitor dump-monitor"><div class="monitor-label"><span>Dump</span><span>parking lot</span></div><div class="screen-grid"><button class="task" type="button" aria-label="Return parked task 1 to main monitor"><span class="task-num">01</span><span class="task-lines"><i></i><i></i></span></button><button class="task" type="button" aria-label="Return parked task 2 to main monitor"><span class="task-num">02</span><span class="task-lines"><i></i><i></i></span></button><button class="task" type="button" aria-label="Return parked task 3 to main monitor"><span class="task-num">03</span><span class="task-lines"><i></i><i></i></span></button></div></div>
             </div>
-          </div>
-          <svg class="gear-canvas" role="img" aria-labelledby="notanats-gear-title notanats-gear-desc">
-            <title id="notanats-gear-title">Hiring process gear chain</title>
-            <desc id="notanats-gear-desc">Six gears move from posting a job to hiring. Without notanATS, the screen and advance gears are missing and the chain grinds out of alignment.</desc>
-          </svg>
-          <figcaption class="figure-note">
-            <span class="state-description" aria-live="polite">The coordination gears are missing. The handoffs lose alignment.</span>
-            <span class="figure-key">Post → Hire</span>
-          </figcaption>
-        </figure>
-      </section>
-
-      <section class="product-section foculet" aria-labelledby="foculet-title">
-        <div class="product-intro">
-          <div>
-            <div class="product-name">
-              <span>Foculet</span>
-              <a class="source-link" href="https://github.com/dt-memyrlabs/foculet" target="_blank" rel="noopener noreferrer">Open source ↗</a>
-            </div>
-            <h2 id="foculet-title">Let’s be honest: tabs and multiple monitors cause more chaos than they fix. Foculet parks what you’re not using, so it’s there when you need it.</h2>
-          </div>
-          <div class="product-copy">
-            <p>Foculet is a Windows app with a Chrome extension. The moment you switch away from a window, it takes a snapshot and parks it as a thumbnail on your spare monitor. Click the thumbnail and the window goes back exactly where it was.</p>
-            <p>Chrome tabs park with a hotkey. You choose which apps never get parked. Everything stays local on your machine. No cloud. No account.</p>
+            <div class="desk-note"><span>Parked work stays visible.</span><span>Click a task to bring it back.</span></div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <figure class="process-figure with" data-process="foculet" data-state="with">
-          <div class="figure-head">
-            <h3 class="figure-title">Figure 03 — The two-monitor loop</h3>
-            <div class="toggle" role="group" aria-label="Show the focus process with or without Foculet">
-              <button type="button" data-state-button="without" aria-pressed="false">Without</button>
-              <button type="button" data-state-button="with" aria-pressed="true">With</button>
-            </div>
-          </div>
-          <svg class="gear-canvas foculet-canvas" role="img" aria-labelledby="foculet-monitor-title foculet-monitor-desc">
-            <title id="foculet-monitor-title">Foculet two-monitor parking loop</title>
-            <desc id="foculet-monitor-desc">A main monitor switches between numbered tasks while switched-away tasks become numbered thumbnails on a dump monitor. Selecting a thumbnail restores it to the main monitor.</desc>
-          </svg>
-          <figcaption class="figure-note">
-            <span class="state-description" aria-live="polite">Switched-away tasks park on the dump monitor. A click brings one back.</span>
-            <span class="figure-key">Switch → Park → Restore</span>
-          </figcaption>
-        </figure>
-      </section>
+    <section class="works" data-chapter="4">
+      <div class="wire-register">
+        <p class="wire-label">In the works</p>
+        <h2>Muse for Chrome - tab-sharing for the browser. Still being built. Not shipped yet.</h2>
+        <div class="wire-tabs" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </section>
 
-      <section class="product-section musechrome" aria-labelledby="musechrome-title">
-        <div class="product-intro">
-          <div>
-            <div class="product-name">
-              <span>Muse for Chrome</span>
-              <span class="status-label">In the works</span>
-            </div>
-            <h2 id="musechrome-title">Let Muse work with the tab you already have open.</h2>
-          </div>
-          <div class="product-copy">
-            <p>This Chrome extension gives a Muse chat access to a browser tab when it needs one. The chat asks. Chrome notifies you. You click the extension icon and choose to hand the tab over.</p>
-            <p>Then Muse and the browser can work together. It is the same basic idea as Claude in Chrome, built for Muse. The handoff is not finished yet.</p>
-          </div>
-        </div>
+    <section class="closer" data-chapter="5">
+      <h2>Build the route. Lose the maze.</h2>
+      <div class="closer-route" aria-hidden="true"><span></span><i></i></div>
+      <div class="contact"><p>Custom projects by referral only.</p><a href="mailto:support@memyr.com">support@memyr.com</a></div>
+    </section>
+  </main>
 
-        <figure class="process-figure work-in-progress" data-process="musechrome" data-state="unfinished">
-          <div class="figure-head">
-            <h3 class="figure-title">Figure 04 — The tab-sharing chain</h3>
-            <span class="figure-key">In the works</span>
-          </div>
-          <svg class="gear-canvas" role="img" aria-labelledby="musechrome-gear-title musechrome-gear-desc">
-            <title id="musechrome-gear-title">Muse browser tab-sharing process gear chain</title>
-            <desc id="musechrome-gear-desc">Six misaligned, jittering gears move from a Muse chat asking for a tab to Muse and the browser working together. The unfinished chain remains in a broken state.</desc>
-          </svg>
-          <figcaption class="figure-note">
-            <span>The handoff is still being built. For now, the chain stays out of alignment.</span>
-            <span class="figure-key">Chat → Working together</span>
-          </figcaption>
-        </figure>
-      </section>
-
-      <section class="closing" aria-labelledby="closing-line">
-        <div class="chapter-marker">The view</div>
-        <blockquote id="closing-line">We build better routes by watching the whole maze.</blockquote>
-      </section>
-    </main>
-
-    <footer>
-      <a href="mailto:support@memyr.com">support@memyr.com</a>
-      <span>Custom projects by referral only.</span>
-    </footer>
-  </div>
-
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.8/dist/lenis.min.js"></script>
   <script>
-    (function () {
-      var NS = "http://www.w3.org/2000/svg";
-      var configs = {
-        gift8: {
-          stages: ["Occasion", "Contributions", "Coordinate", "Collect", "Purchase", "Delivered"],
-          products: [2, 3],
-          brand: "Gift8",
-          desktop: {
-            start: [184, 160],
-            pitch: [56, 70, 48, 66, 52, 60],
-            angles: [-25, 52, -50, 31, -19]
-          },
-          mobile: {
-            start: [100, 70],
-            pitch: [40, 52, 36, 48, 42, 46],
-            angles: [20, 75, 140, 55, 155]
-          }
-        },
-        notanats: {
-          stages: ["Post", "Applicants", "Screen", "Advance", "Interview", "Hire"],
-          products: [2, 3],
-          brand: "notanATS",
-          desktop: {
-            start: [195, 126],
-            pitch: [68, 46, 58, 42, 72, 50],
-            angles: [34, -47, 63, -35, 18]
-          },
-          mobile: {
-            start: [100, 80],
-            pitch: [50, 36, 44, 40, 54, 38],
-            angles: [28, 104, 32, 135, 16]
-          }
-        },
-        foculet: {
-          stages: ["Ping", "Switch", "Park", "Board", "Click", "Resume"],
-          products: [2, 3],
-          brand: "Foculet",
-          withDescription: "Switched-away tasks park on the dump monitor. A click brings one back.",
-          withoutDescription: "On one screen, switched-away windows collapse into a messy pile.",
-          desktop: {
-            start: [176, 172],
-            pitch: [48, 66, 54, 70, 46, 60],
-            angles: [-31, 58, -54, 39, -17]
-          },
-          mobile: {
-            start: [104, 76],
-            pitch: [40, 54, 44, 52, 38, 48],
-            angles: [36, 118, 42, 142, 24]
-          }
-        },
-        musechrome: {
-          stages: ["Chat", "Ask", "Notify", "Click", "Tab shared", "Working together"],
-          products: [2, 3, 4],
-          brand: "Muse + Chrome",
-          desktop: {
-            start: [184, 148],
-            pitch: [54, 44, 60, 48, 56, 46],
-            angles: [38, -51, 69, -34, 23]
-          },
-          mobile: {
-            start: [104, 74],
-            pitch: [42, 34, 46, 38, 44, 36],
-            angles: [31, 112, 46, 137, 19]
-          }
-        }
-      };
+  (function () {
+    "use strict";
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduce && window.Lenis) {
+      var lenis = new window.Lenis({ duration: 1.05, smoothWheel: true, wheelMultiplier: .92 });
+      function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+      requestAnimationFrame(raf);
+    }
 
-      function svgEl(name, attrs, text) {
-        var node = document.createElementNS(NS, name);
-        Object.keys(attrs || {}).forEach(function (key) { node.setAttribute(key, attrs[key]); });
-        if (text !== undefined) node.textContent = text;
-        return node;
-      }
-
-      function gearPath(teeth, rootRadius, outerRadius) {
-        var points = [];
-        var steps = teeth * 4;
-        for (var i = 0; i < steps; i++) {
-          var phase = i % 4;
-          var radius = (phase === 1 || phase === 2) ? outerRadius : rootRadius;
-          var angle = -Math.PI / 2 + (Math.PI * 2 * i / steps);
-          points.push((i === 0 ? "M" : "L") +
-            (Math.cos(angle) * radius).toFixed(2) + " " +
-            (Math.sin(angle) * radius).toFixed(2));
-        }
-        return points.join(" ") + " Z";
-      }
-
-      function layoutChain(spec) {
-        var firstTeeth = spec.pitch[0] / 2;
-        var gears = [{ x: spec.start[0], y: spec.start[1], pitch: spec.pitch[0], teeth: firstTeeth, phase: 0 }];
-        for (var i = 1; i < spec.pitch.length; i++) {
-          var previous = gears[i - 1];
-          var desiredAngle = spec.angles[i - 1] * Math.PI / 180;
-          var parentToothBase = -Math.PI / 2 + 3 * Math.PI / (4 * previous.teeth);
-          var parentPitch = Math.PI * 2 / previous.teeth;
-          var toothIndex = Math.round((desiredAngle - previous.phase - parentToothBase) / parentPitch);
-          var angle = previous.phase + parentToothBase + toothIndex * parentPitch;
-          var distance = spec.pitch[i - 1] + spec.pitch[i];
-          var teeth = spec.pitch[i] / 2;
-          var childGapBase = -Math.PI / 2 + 7 * Math.PI / (4 * teeth);
-          gears.push({
-            x: previous.x + Math.cos(angle) * distance,
-            y: previous.y + Math.sin(angle) * distance,
-            pitch: spec.pitch[i],
-            teeth: teeth,
-            phase: angle + Math.PI - childGapBase
-          });
-        }
-        return gears;
-      }
-
-      function makeMechanism(isProduct, direction, pitchRadius, teeth, phase) {
-        var mechanism = svgEl("g", { "class": "mechanism" });
-        var shell = svgEl("g", { "class": "jitter-shell" });
-        var outerRadius = pitchRadius + 4;
-        var duration = (15 * teeth / 28).toFixed(2) + "s";
-        var rotor = svgEl("g", {
-          "class": "rotor " + direction,
-          style: "--phase:" + (phase * 180 / Math.PI).toFixed(3) + "deg;animation-duration:" + duration
-        });
-        rotor.appendChild(svgEl("path", { "class": "gear-outline", d: gearPath(teeth, pitchRadius - 4, outerRadius) }));
-        rotor.appendChild(svgEl("circle", { "class": "gear-ring", cx: 0, cy: 0, r: (pitchRadius * .64).toFixed(2) }));
-        for (var spoke = 0; spoke < 6; spoke++) {
-          var a = Math.PI * 2 * spoke / 6;
-          rotor.appendChild(svgEl("line", {
-            "class": "gear-ring",
-            x1: (Math.cos(a) * pitchRadius * .24).toFixed(2),
-            y1: (Math.sin(a) * pitchRadius * .24).toFixed(2),
-            x2: (Math.cos(a) * pitchRadius * .58).toFixed(2),
-            y2: (Math.sin(a) * pitchRadius * .58).toFixed(2)
-          }));
-        }
-        rotor.appendChild(svgEl("circle", { "class": "gear-hub", cx: 0, cy: 0, r: (pitchRadius * .2).toFixed(2) }));
-        shell.appendChild(rotor);
-        mechanism.appendChild(shell);
-        return mechanism;
-      }
-
-      function renderFoculetFigure(figure, arrivingTask) {
-        var svg = figure.querySelector("svg");
-        var isMobile = window.innerWidth <= 600;
-        var isWith = figure.getAttribute("data-state") === "with";
-        var tasks = [1, 2, 3, 4];
-
-        if (figure._foculetTimer) {
-          window.clearTimeout(figure._foculetTimer);
-          figure._foculetTimer = null;
-        }
-
-        while (svg.lastChild && svg.lastChild.nodeName.toLowerCase() !== "desc") {
-          svg.removeChild(svg.lastChild);
-        }
-
-        svg.setAttribute("viewBox", isMobile ? "0 0 400 430" : "0 0 1000 360");
-        svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
-
-        function drawMonitor(x, y, width, height, label) {
-          var group = svgEl("g", {});
-          group.appendChild(svgEl("rect", { "class": "monitor-frame", x: x, y: y, width: width, height: height, rx: 5 }));
-          group.appendChild(svgEl("rect", { "class": "monitor-screen", x: x + 11, y: y + 11, width: width - 22, height: height - 30, rx: 2 }));
-          group.appendChild(svgEl("line", { "class": "monitor-stand", x1: x + width / 2, y1: y + height, x2: x + width / 2, y2: y + height + 27 }));
-          group.appendChild(svgEl("line", { "class": "monitor-base", x1: x + width / 2 - 34, y1: y + height + 27, x2: x + width / 2 + 34, y2: y + height + 27 }));
-          group.appendChild(svgEl("text", { "class": "monitor-label", x: x + width / 2, y: y + height + 49 }, label));
-          svg.appendChild(group);
-        }
-
-        function drawTaskWindow(parent, x, y, width, height, task, compact) {
-          parent.appendChild(svgEl("rect", { "class": compact ? "thumb-frame" : "task-window", x: x, y: y, width: width, height: height, rx: 2 }));
-          parent.appendChild(svgEl("rect", { "class": compact ? "thumb-header" : "task-window-header", x: x, y: y, width: width, height: compact ? 10 : 16, rx: 2 }));
-          parent.appendChild(svgEl("text", { "class": "task-number", x: x + width / 2, y: y + height / 2 + (compact ? 7 : 9) }, String(task)));
-          if (!compact) parent.appendChild(svgEl("text", { "class": "task-title", x: x + width / 2, y: y + height - 18 }, "Task " + task));
-        }
-
-        if (!isWith) {
-          var single = isMobile
-            ? { x: 34, y: 77, w: 332, h: 245 }
-            : { x: 180, y: 44, w: 640, h: 230 };
-          drawMonitor(single.x, single.y, single.w, single.h, "One monitor");
-          var pile = isMobile
-            ? [[58, 118, 236, 128, -5], [91, 142, 224, 126, 7], [49, 164, 238, 128, -8], [106, 184, 218, 118, 5]]
-            : [[235, 82, 360, 142, -5], [302, 105, 350, 140, 7], [215, 123, 370, 140, -8], [335, 139, 330, 126, 5]];
-          pile.forEach(function (item, index) {
-            var shell = svgEl("g", { transform: "translate(" + item[0] + " " + item[1] + ") rotate(" + item[4] + " " + item[2] / 2 + " " + item[3] / 2 + ")" });
-            var windowGroup = svgEl("g", { "class": "chaos-window" });
-            drawTaskWindow(windowGroup, 0, 0, item[2], item[3], index + 1, false);
-            shell.appendChild(windowGroup);
-            svg.appendChild(shell);
-          });
-          svg.appendChild(svgEl("text", { "class": "task-caption", x: isMobile ? 200 : 500, y: isMobile ? 397 : 342 }, "Switch away. Hunt for it again."));
-          return;
-        }
-
-        if (!figure._foculetState) {
-          figure._foculetState = { active: 3, parked: [1, 2], next: 4 };
-        }
-        var state = figure._foculetState;
-        var main = isMobile
-          ? { x: 18, y: 88, w: 170, h: 190 }
-          : { x: 70, y: 48, w: 382, h: 230 };
-        var dump = isMobile
-          ? { x: 212, y: 88, w: 170, h: 190 }
-          : { x: 548, y: 48, w: 382, h: 230 };
-
-        drawMonitor(main.x, main.y, main.w, main.h, "Main monitor");
-        drawMonitor(dump.x, dump.y, dump.w, dump.h, "Dump monitor");
-        svg.appendChild(svgEl("path", {
-          "class": "parking-route",
-          d: "M" + (main.x + main.w + 10) + " " + (main.y + main.h * .48) + " L" + (dump.x - 10) + " " + (dump.y + dump.h * .48)
-        }));
-
-        var activeGroup = svgEl("g", {});
-        drawTaskWindow(activeGroup, main.x + 25, main.y + 29, main.w - 50, main.h - 76, state.active, false);
-        svg.appendChild(activeGroup);
-
-        var columns = 2;
-        var gap = isMobile ? 7 : 14;
-        var thumbW = (dump.w - 44 - gap) / 2;
-        var thumbH = isMobile ? 55 : 68;
-        state.parked.slice(-4).forEach(function (task, index) {
-          var col = index % columns;
-          var row = Math.floor(index / columns);
-          var x = dump.x + 22 + col * (thumbW + gap);
-          var y = dump.y + 29 + row * (thumbH + gap);
-          var thumb = svgEl("g", {
-            "class": "task-thumb" + (task === arrivingTask ? " arriving" : ""),
-            role: "button",
-            tabindex: "0",
-            "aria-label": "Restore task " + task + " to the main monitor"
-          });
-          drawTaskWindow(thumb, x, y, thumbW, thumbH, task, true);
-          function restore() {
-            var previous = state.active;
-            state.parked = state.parked.filter(function (number) { return number !== task; });
-            state.parked.push(previous);
-            state.active = task;
-            state.next = tasks[(tasks.indexOf(task) + 1) % tasks.length];
-            renderFoculetFigure(figure, previous);
-          }
-          thumb.addEventListener("click", restore);
-          thumb.addEventListener("keydown", function (event) {
-            if (event.key === "Enter" || event.key === " ") {
-              event.preventDefault();
-              restore();
-            }
-          });
-          svg.appendChild(thumb);
-        });
-
-        svg.appendChild(svgEl("text", { "class": "task-caption", x: isMobile ? 200 : 500, y: isMobile ? 397 : 342 }, "Switch. Park. Click to restore."));
-
-        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-          figure._foculetTimer = window.setTimeout(function () {
-            var outgoing = state.active;
-            var incoming = state.next;
-            state.parked = state.parked.filter(function (number) { return number !== incoming; });
-            state.parked.push(outgoing);
-            if (state.parked.length > 4) state.parked.shift();
-            state.active = incoming;
-            state.next = tasks[(tasks.indexOf(incoming) + 1) % tasks.length];
-            renderFoculetFigure(figure, outgoing);
-          }, 2600);
-        }
-      }
-
-      function renderFigure(figure) {
-        var svg = figure.querySelector("svg");
-        var key = figure.getAttribute("data-process");
-        var config = configs[key];
-        if (key === "foculet") {
-          renderFoculetFigure(figure);
-          return;
-        }
-        var isMobile = window.innerWidth <= 600;
-        var gears = layoutChain(isMobile ? config.mobile : config.desktop);
-
-        while (svg.lastChild && svg.lastChild.nodeName.toLowerCase() !== "desc") {
-          svg.removeChild(svg.lastChild);
-        }
-
-        svg.setAttribute("viewBox", isMobile ? "0 0 400 400" : "0 0 1000 330");
-        svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
-
-        var datum = svgEl("path", { "class": "datum-line" });
-        var d = "M" + gears[0].x + " " + gears[0].y;
-        gears.slice(1).forEach(function (gear) { d += " L" + gear.x + " " + gear.y; });
-        datum.setAttribute("d", d);
-        svg.appendChild(datum);
-
-        gears.forEach(function (gear, index) {
-          var isProduct = config.products.indexOf(index) !== -1;
-          var crossSize = Math.max(12, gear.pitch * .3);
-          var assembly = svgEl("g", {
-            "class": "assembly" + (isProduct ? " product-gear" : ""),
-            transform: "translate(" + gear.x + " " + gear.y + ")"
-          });
-          assembly.appendChild(makeMechanism(isProduct, index % 2 === 0 ? "clockwise" : "counter", gear.pitch, gear.teeth, gear.phase));
-          assembly.appendChild(svgEl("circle", { "class": "gap-marker", cx: 0, cy: 0, r: gear.pitch + 1 }));
-          assembly.appendChild(svgEl("line", { "class": "gap-cross", x1: -crossSize, y1: -crossSize, x2: crossSize, y2: crossSize }));
-          assembly.appendChild(svgEl("line", { "class": "gap-cross", x1: crossSize, y1: -crossSize, x2: -crossSize, y2: crossSize }));
-
-          if (isMobile) {
-            assembly.appendChild(svgEl("text", { "class": "stage-label", x: 0, y: isProduct ? -2 : 5 }, config.stages[index]));
-            if (isProduct) assembly.appendChild(svgEl("text", { "class": "brand-label", x: 0, y: 14 }, config.brand));
-          } else {
-            var labelX = 150 + index * 140;
-            var localLabelX = labelX - gear.x;
-            var indexY = 282 - gear.y;
-            var stageY = 305 - gear.y;
-            assembly.appendChild(svgEl("line", { "class": "dimension-line", x1: 0, y1: gear.pitch + 6, x2: localLabelX, y2: indexY - 12 }));
-            assembly.appendChild(svgEl("text", { "class": "index-label", x: localLabelX, y: indexY }, "0" + (index + 1)));
-            assembly.appendChild(svgEl("text", { "class": "stage-label", x: localLabelX, y: stageY }, config.stages[index]));
-            if (isProduct) assembly.appendChild(svgEl("text", { "class": "brand-label", x: 0, y: 4 }, config.brand));
-          }
-          svg.appendChild(assembly);
-        });
-      }
-
-      function setState(figure, state) {
-        var isWith = state === "with";
-        figure.setAttribute("data-state", state);
-        figure.classList.toggle("with", isWith);
-        figure.classList.toggle("without", !isWith);
-        figure.querySelectorAll("[data-state-button]").forEach(function (button) {
-          button.setAttribute("aria-pressed", String(button.getAttribute("data-state-button") === state));
-        });
-        var description = figure.querySelector(".state-description");
-        var config = configs[figure.getAttribute("data-process")];
-        description.textContent = isWith
-          ? (config.withDescription || "Every gear is engaged. The handoffs keep moving.")
-          : (config.withoutDescription || "The coordination gears are missing. The handoffs lose alignment.");
-        if (figure.getAttribute("data-process") === "foculet") renderFoculetFigure(figure);
-      }
-
-      var figures = Array.prototype.slice.call(document.querySelectorAll(".process-figure"));
-      figures.forEach(function (figure) {
-        renderFigure(figure);
-        figure.querySelectorAll("[data-state-button]").forEach(function (button) {
-          button.addEventListener("click", function () {
-            setState(figure, button.getAttribute("data-state-button"));
-          });
-        });
+    var chapters = Array.prototype.slice.call(document.querySelectorAll("[data-chapter]"));
+    var markers = Array.prototype.slice.call(document.querySelectorAll(".spine-marker"));
+    var chapterObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var index = Number(entry.target.getAttribute("data-chapter"));
+        markers.forEach(function (m, i) { m.classList.toggle("active", i === index); });
       });
+    }, { rootMargin: "-42% 0px -42% 0px", threshold: 0 });
+    chapters.forEach(function (chapter) { chapterObserver.observe(chapter); });
 
-      var lastMode = window.innerWidth <= 600;
-      window.addEventListener("resize", function () {
-        var nextMode = window.innerWidth <= 600;
-        if (nextMode !== lastMode) {
-          lastMode = nextMode;
-          figures.forEach(renderFigure);
+    var steps = Array.prototype.slice.call(document.querySelectorAll(".gift8 .step, .foculet .step"));
+    var stepObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var step = entry.target;
+        var section = step.closest(".chapter");
+        var stage = section.querySelector(".stage");
+        section.querySelectorAll(".step").forEach(function (node) { node.classList.toggle("active", node === step); });
+        if (stage) {
+          stage.setAttribute("data-state", step.getAttribute("data-state") || "0");
+          if (section.classList.contains("foculet")) stage.classList.remove("returned");
         }
       });
-    }());
+    }, { rootMargin: "-34% 0px -42% 0px", threshold: 0 });
+    steps.forEach(function (step) { stepObserver.observe(step); });
+
+    var natsSection = document.querySelector(".nats");
+    var natsStage = document.querySelector(".nats-stage");
+    var natsSteps = Array.prototype.slice.call(document.querySelectorAll(".nats .step"));
+    var natsTimers = [];
+    var natsPlayed = false;
+    function setNatsState(state) {
+      natsStage.setAttribute("data-state", String(state));
+      natsSteps.forEach(function (step, index) { step.classList.toggle("active", index === Math.min(state, 2)); });
+    }
+    function playNats() {
+      natsTimers.forEach(clearTimeout);
+      natsTimers = [];
+      setNatsState(0);
+      if (reduce) { setNatsState(3); return; }
+      natsTimers.push(setTimeout(function () { setNatsState(1); }, 420));
+      natsTimers.push(setTimeout(function () { setNatsState(2); }, 1050));
+      natsTimers.push(setTimeout(function () { setNatsState(3); }, 1900));
+    }
+    var natsObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        if (!natsPlayed) { natsPlayed = true; playNats(); }
+        if (!reduce && entry.intersectionRatio > .72 && Number(natsStage.getAttribute("data-state")) < 2) setNatsState(2);
+      });
+    }, { threshold: [0, .32, .55, .72] });
+    natsObserver.observe(natsSection);
+
+    var foculet = document.querySelector(".foculet-stage");
+    var parked = Array.prototype.slice.call(document.querySelectorAll(".dump-monitor .task"));
+    parked.forEach(function (task) {
+      task.addEventListener("click", function () {
+        foculet.classList.toggle("returned", task === parked[0] && !foculet.classList.contains("returned"));
+      });
+    });
+  }());
   </script>
 </body>
 </html>
