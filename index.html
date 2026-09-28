@@ -4,557 +4,1205 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <meta name="theme-color" content="#f2f0e9" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#0b0d0e" media="(prefers-color-scheme: dark)" />
   <link rel="icon" href="data:," />
+  <title>Memyr Labs — Agentic coordination</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
-  <title>Memyr Labs — Products and Agentic Experiences</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap" rel="stylesheet" />
   <style>
     :root {
       color-scheme: light dark;
-      --page: #f2f0e9;
-      --ink: #101313;
-      --muted: #5b615f;
-      --line: rgba(16, 19, 19, .18);
-      --foot: #e5e2d8;
-      --gift-navy: #10253d;
-      --gift-navy-2: #173451;
-      --gift-cream: #fff8e9;
-      --gift-gold: #f3bd51;
-      --gift-gold-dark: #cd8e21;
-      --ats-black: #0b0f11;
-      --ats-panel: #10171a;
-      --ats-ink: #edf7f6;
-      --ats-muted: #a4b5b3;
-      --ats-cyan: #30d7dd;
-      --split: 50%;
-      --scene-pad: 18px;
-      --door-gap: 18px;
+      --paper: #f3f0e8;
+      --paper-deep: #e9e4d8;
+      --ink: #20211f;
+      --muted: #65645d;
+      --rule: #c8c2b5;
+      --blueprint: #787a75;
+      --navy: #182b3a;
+      --gold: #aa7928;
+      --gold-soft: #e8d7b2;
+      --cyan: #087e97;
+      --cyan-soft: #b8dbe2;
+      --amber: #a85d12;
+      --amber-soft: #e8ca9f;
+      --dark: #15242b;
+      --focus: #9d5b12;
+      --max: 1120px;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --page: #0b0d0e;
-        --ink: #f0f1ed;
-        --muted: #aeb4b1;
-        --line: rgba(240, 241, 237, .18);
-        --foot: #121516;
+        --paper: #171916;
+        --paper-deep: #20231e;
+        --ink: #ebe8df;
+        --muted: #aaa99f;
+        --rule: #41443e;
+        --blueprint: #999c95;
+        --navy: #a9c3d1;
+        --gold: #d3a454;
+        --gold-soft: #574727;
+        --cyan: #59bdd1;
+        --cyan-soft: #234d56;
+        --amber: #e0a15d;
+        --amber-soft: #5b3b20;
+        --dark: #c0d3d9;
+        --focus: #e0b765;
       }
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; background: var(--page); }
+
+    html {
+      background: var(--paper);
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      min-width: 0;
-      overflow-x: clip;
-      background: var(--page);
+      min-width: 320px;
+      overflow-x: hidden;
+      background:
+        linear-gradient(90deg, transparent 0, transparent calc(100% - 1px), color-mix(in srgb, var(--ink) 2%, transparent) 100%),
+        var(--paper);
       color: var(--ink);
-      font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
-      -webkit-font-smoothing: antialiased;
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: 17px;
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
     }
+
     a { color: inherit; }
 
-    .intro {
-      min-height: 54svh;
-      padding: clamp(28px, 5vw, 72px);
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(250px, 470px);
-      align-content: center;
-      gap: 36px;
-      border-bottom: 1px solid var(--line);
-      position: relative;
+    .page {
+      width: min(100% - 40px, var(--max));
+      margin: 0 auto;
     }
-    .intro h1 {
-      margin: 0;
-      max-width: 790px;
-      font-size: clamp(1.7rem, 3vw, 2.9rem);
-      font-weight: 480;
-      line-height: .92;
-      letter-spacing: -.07em;
-    }
-    .intro-copy {
-      align-self: end;
-      border-top: 1px solid var(--line);
-      padding-top: 17px;
-    }
-    .intro-copy p {
-      margin: 0;
-      max-width: 34ch;
-      font-size: clamp(1rem, 1.35vw, 1.25rem);
-      line-height: 1.5;
-      color: var(--muted);
-    }
-    .cue {
-      position: absolute;
-      left: clamp(28px, 5vw, 72px);
-      bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font: 700 .68rem/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .cue::before {
-      content: "";
-      width: 32px;
-      height: 1px;
-      background: currentColor;
-      transform-origin: left;
-      animation: breathe 1.8s ease-in-out infinite;
-    }
-    @keyframes breathe { 50% { transform: scaleX(.45); opacity: .45; } }
 
-    .doors-scroll { height: 220svh; position: relative; }
-    .lineup-title {
-      position: absolute;
-      top: 30px;
-      left: 50%;
-      z-index: 7;
-      margin: 0;
-      padding: 8px 13px;
-      transform: translateX(-50%);
-      background: var(--page);
-      color: var(--ink);
-      font: 750 .68rem/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-      letter-spacing: .11em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-    .doors-stage {
-      position: sticky;
-      top: 0;
-      height: 100svh;
-      min-height: 620px;
-      padding: var(--scene-pad);
-      display: flex;
-      gap: var(--door-gap);
-      overflow: hidden;
-      background: var(--page);
-    }
-    .door {
-      position: relative;
-      isolation: isolate;
-      min-width: 0;
-      overflow: hidden;
-      text-decoration: none;
-      transform: translateY(var(--lift, 0px));
-      transition: flex-basis .48s cubic-bezier(.2,.7,.15,1), filter .35s ease, transform .2s ease;
-    }
-    .door:focus-visible { outline: 3px solid #fff; outline-offset: -7px; }
-    .door-left {
-      flex: 0 1 calc(var(--split) - (var(--door-gap) / 2));
-      background: var(--gift-navy);
-      color: var(--gift-cream);
-      border-radius: 36px 14px 14px 36px;
-    }
-    .door-right {
-      flex: 1 1 calc(100% - var(--split));
-      background: var(--ats-black);
-      color: var(--ats-ink);
-      border-radius: 14px 2px 2px 14px;
-    }
-    .doors-stage[data-hover="left"] { --split: 62%; }
-    .doors-stage[data-hover="right"] { --split: 38%; }
-    .doors-stage[data-hover="left"] .door-right,
-    .doors-stage[data-hover="right"] .door-left { filter: brightness(.72) saturate(.78); }
-
-    .door-inner {
-      position: absolute;
-      inset: 0;
-      padding: clamp(28px, 4vw, 64px);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      z-index: 2;
-    }
-    .door-topline {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      font-size: .72rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-    }
-    .door-no { opacity: .62; font-variant-numeric: tabular-nums; }
-    .door-label { font-weight: 800; }
-
-    .door-copy { max-width: 560px; }
-    .door-copy h2 {
-      margin: 0 0 20px;
-      text-wrap: balance;
-    }
-    .door-copy p {
-      margin: 0;
-      max-width: 32ch;
-      text-wrap: pretty;
-    }
-    .door-action {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      width: fit-content;
-      font-weight: 800;
-    }
-    .door-action .arrow {
-      display: grid;
-      place-items: center;
-      width: 42px;
-      height: 42px;
-      border: 1px solid currentColor;
-      border-radius: 50%;
-      transition: transform .3s ease, background .3s ease, color .3s ease;
-    }
-    .door:hover .arrow,
-    .door:focus-visible .arrow { transform: translateX(6px); }
-
-    .door-left .door-inner { font-family: "Avenir Next Rounded", "Trebuchet MS", sans-serif; }
-    .door-left .door-label { color: var(--gift-gold); }
-    .door-left h2 {
-      font-size: clamp(1.8rem, 3.2vw, 3.1rem);
-      line-height: .83;
-      letter-spacing: -.075em;
-      font-weight: 800;
-    }
-    .door-left p {
-      color: #e9e3d6;
-      font-size: clamp(1rem, 1.5vw, 1.3rem);
-      line-height: 1.45;
-    }
-    .door-left .door-action { color: var(--gift-gold); }
-    .door-left:hover .arrow,
-    .door-left:focus-visible .arrow { color: var(--gift-navy); background: var(--gift-gold); }
-    .paper {
-      position: absolute;
-      z-index: 1;
-      pointer-events: none;
-      transition: transform .55s cubic-bezier(.2,.75,.15,1);
-    }
-    .paper-one {
-      width: clamp(180px, 28vw, 480px);
-      aspect-ratio: 1;
-      right: -12%;
-      top: 9%;
-      border-radius: 45% 55% 61% 39% / 52% 34% 66% 48%;
-      background: var(--gift-gold);
-      opacity: .93;
-      transform: rotate(12deg) translate3d(calc(var(--progress, 0) * -22px), calc(var(--progress, 0) * 42px), 0);
-    }
-    .paper-two {
-      width: clamp(160px, 23vw, 380px);
-      aspect-ratio: 1.15;
-      left: -11%;
-      bottom: -12%;
-      border-radius: 56% 44% 35% 65% / 41% 55% 45% 59%;
-      background: var(--gift-cream);
-      opacity: .13;
-      transform: rotate(-16deg) translateY(calc(var(--progress, 0) * -34px));
-    }
-    .paper-three {
-      width: 94px;
-      height: 22px;
-      right: 12%;
-      bottom: 20%;
-      border-radius: 999px;
-      background: var(--gift-gold-dark);
-      transform: rotate(-8deg);
-    }
-    .door-left:hover .paper-one { transform: rotate(20deg) scale(1.08); }
-
-    .door-right .door-inner {
-      font-family: "Space Grotesk", "Space Grotesk Fallback", "Segoe UI", system-ui, sans-serif;
-      border-top: 6px solid var(--ats-cyan);
-    }
-    .door-right .door-topline,
-    .door-right .door-action {
-      font-family: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, Consolas, monospace;
-    }
-    .door-right .door-label { color: var(--ats-cyan); }
-    .door-right h2 {
-      font-family: "Space Grotesk", "Space Grotesk Fallback", "Segoe UI", system-ui, sans-serif;
-      font-size: clamp(1.7rem, 3vw, 2.9rem);
-      line-height: .87;
-      letter-spacing: -.062em;
-      font-weight: 500;
-    }
-    .door-right h2 span { color: var(--ats-cyan); font-style: italic; }
-    .door-right p {
-      color: var(--ats-muted);
-      font-size: clamp(.95rem, 1.2vw, 1.1rem);
-      line-height: 1.6;
-    }
-    .door-right .door-action { color: var(--ats-cyan); font-size: .86rem; }
-    .door-right:hover .arrow,
-    .door-right:focus-visible .arrow { color: var(--ats-black); background: var(--ats-cyan); }
-    .grid-field {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      opacity: .34;
-      background-image:
-        linear-gradient(rgba(48,215,221,.10) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(48,215,221,.10) 1px, transparent 1px);
-      background-size: 58px 58px;
-      background-position: calc(var(--progress, 0) * 20px) calc(var(--progress, 0) * -34px);
-      mask-image: linear-gradient(to bottom, #000, transparent 72%);
-    }
-    .scan {
-      position: absolute;
-      z-index: 1;
-      width: 55%;
-      height: 1px;
-      right: 8%;
-      top: calc(24% + (var(--progress, 0) * 40%));
-      background: var(--ats-cyan);
-      box-shadow: 0 0 28px rgba(48, 215, 221, .35);
-      opacity: .7;
-      pointer-events: none;
-    }
-    .axis {
-      position: absolute;
-      right: clamp(24px, 3vw, 48px);
-      top: 17%;
-      bottom: 17%;
-      width: 1px;
-      background: rgba(48,215,221,.28);
-      z-index: 1;
-    }
-    .axis::before, .axis::after {
-      content: "";
-      position: absolute;
-      width: 7px;
-      height: 7px;
-      border: 1px solid var(--ats-cyan);
-      border-radius: 50%;
-      left: -4px;
-    }
-    .axis::before { top: 0; }
-    .axis::after { bottom: 0; }
-
-    .seam {
-      position: absolute;
-      left: var(--split);
-      top: 50%;
-      width: 42px;
-      height: 42px;
-      margin: -21px 0 0 -21px;
-      border-radius: 50%;
-      z-index: 5;
-      background: var(--page);
-      display: grid;
-      place-items: center;
-      transition: left .48s cubic-bezier(.2,.7,.15,1);
-      pointer-events: none;
-    }
-    .seam::before, .seam::after {
-      content: "";
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--ink);
-      position: absolute;
-      opacity: .65;
-    }
-    .seam::before { transform: translateX(-5px); }
-    .seam::after { transform: translateX(5px); }
-
-    .closer {
-      min-height: 72svh;
-      padding: clamp(56px, 8vw, 120px) clamp(28px, 5vw, 72px) 34px;
-      display: grid;
-      grid-template-rows: 1fr auto;
-      border-top: 1px solid var(--line);
-    }
-    .closer-line {
-      align-self: center;
-      margin: 0;
-      max-width: 13ch;
-      font-size: clamp(1.8rem, 3.3vw, 3.2rem);
-      line-height: .9;
-      letter-spacing: -.075em;
-      font-weight: 520;
-      text-wrap: balance;
-    }
-    .closer-line span { color: var(--muted); }
-    footer {
-      padding-top: 28px;
-      border-top: 1px solid var(--line);
+    .masthead {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
       gap: 24px;
-      font-size: .9rem;
+      padding: 29px 0 22px;
+      border-bottom: 1px solid var(--rule);
     }
-    footer p { margin: 0; color: var(--muted); }
+
+    .wordmark {
+      margin: 0;
+      font-family: "Source Serif 4", serif;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+    }
+
+    .folio {
+      color: var(--muted);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(250px, .65fr);
+      gap: clamp(48px, 9vw, 120px);
+      align-items: end;
+      min-height: 560px;
+      padding: 110px 0 92px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      max-width: 820px;
+      margin-bottom: 0;
+      font-family: "Source Serif 4", serif;
+      font-size: clamp(46px, 6.2vw, 78px);
+      font-weight: 500;
+      line-height: .99;
+      letter-spacing: -.045em;
+      text-wrap: balance;
+    }
+
+    .studio-line {
+      max-width: 360px;
+      margin: 0 0 4px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    .chapter {
+      display: grid;
+      grid-template-columns: 110px minmax(0, 650px);
+      gap: 30px;
+      padding: 110px 0 120px;
+    }
+
+    .chapter-marker {
+      padding-top: 7px;
+      color: var(--muted);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      line-height: 1.4;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .chapter h2 {
+      margin-bottom: 28px;
+      font-family: "Source Serif 4", serif;
+      font-size: clamp(35px, 4.5vw, 54px);
+      font-weight: 500;
+      line-height: 1.08;
+      letter-spacing: -.035em;
+      text-wrap: balance;
+    }
+
+    .chapter p {
+      margin-bottom: 1.1em;
+      font-size: clamp(18px, 2vw, 21px);
+      line-height: 1.62;
+    }
+
+    .chapter p:last-child { margin-bottom: 0; }
+
+    .problem {
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .problem .lead::first-letter {
+      float: left;
+      margin: .07em .13em 0 0;
+      font-family: "Source Serif 4", serif;
+      font-size: 4.2em;
+      line-height: .72;
+    }
+
+    .product-section {
+      padding: 112px 0 132px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .product-intro {
+      display: grid;
+      grid-template-columns: minmax(260px, .85fr) minmax(0, 1.15fr);
+      gap: clamp(42px, 8vw, 110px);
+      align-items: start;
+      margin-bottom: 72px;
+    }
+
+    .product-name {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 26px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .035em;
+    }
+
+    .product-name::before {
+      width: 22px;
+      height: 2px;
+      background: var(--accent);
+      content: "";
+    }
+
+    .product-section h2 {
+      margin-bottom: 0;
+      font-family: "Source Serif 4", serif;
+      font-size: clamp(37px, 5vw, 60px);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -.038em;
+      text-wrap: balance;
+    }
+
+    .product-copy {
+      padding-top: 39px;
+    }
+
+    .product-copy p {
+      margin-bottom: 1.05em;
+      font-size: clamp(17px, 1.75vw, 20px);
+      line-height: 1.63;
+    }
+
+    .product-copy p:last-child { margin-bottom: 0; }
+
+    .gift8 { --accent: var(--gold); --accent-soft: var(--gold-soft); }
+    .notanats { --accent: var(--cyan); --accent-soft: var(--cyan-soft); }
+    .foculet { --accent: var(--amber); --accent-soft: var(--amber-soft); }
+    .musechrome { --accent: var(--blueprint); --accent-soft: var(--paper-deep); }
+
+    .source-link {
+      margin-left: auto;
+      color: var(--accent);
+      font-size: 10px;
+      letter-spacing: .055em;
+      text-decoration-color: color-mix(in srgb, var(--accent) 50%, transparent);
+      text-underline-offset: 4px;
+      text-transform: uppercase;
+    }
+
+    .source-link:hover { text-decoration-color: currentColor; }
+    .source-link:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 4px;
+    }
+
+    .status-label {
+      margin-left: auto;
+      padding: 4px 7px 3px;
+      border: 1px dashed var(--blueprint);
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .musechrome .product-intro,
+    .musechrome .process-figure {
+      filter: saturate(.15);
+    }
+
+    .process-figure {
+      margin: 0;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .figure-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 17px 0 12px;
+    }
+
+    .figure-title {
+      margin: 0;
+      color: var(--muted);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .toggle {
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      padding: 3px;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--paper-deep) 65%, transparent);
+    }
+
+    .toggle button {
+      min-width: 76px;
+      padding: 7px 13px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font: 500 11px/1 "IBM Plex Mono", monospace;
+      letter-spacing: .035em;
+      cursor: pointer;
+    }
+
+    .toggle button[aria-pressed="true"] {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .toggle button:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .gear-canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      min-height: 300px;
+      overflow: visible;
+    }
+
+    .foculet-canvas { min-height: 340px; }
+
+    .monitor-frame {
+      fill: var(--paper-deep);
+      stroke: var(--blueprint);
+      stroke-width: 2;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .monitor-screen {
+      fill: color-mix(in srgb, var(--paper) 92%, var(--amber-soft));
+      stroke: var(--rule);
+      stroke-width: 1;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .monitor-stand,
+    .monitor-base,
+    .parking-route {
+      fill: none;
+      stroke: var(--blueprint);
+      stroke-width: 1.5;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .parking-route {
+      stroke-dasharray: 4 7;
+      opacity: .6;
+    }
+
+    .monitor-label,
+    .task-caption {
+      fill: var(--muted);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      letter-spacing: .04em;
+      text-anchor: middle;
+      text-transform: uppercase;
+    }
+
+    .task-window,
+    .thumb-frame {
+      fill: var(--paper);
+      stroke: var(--accent);
+      stroke-width: 1.4;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .task-window-header,
+    .thumb-header { fill: color-mix(in srgb, var(--amber-soft) 68%, var(--paper)); }
+
+    .task-number {
+      fill: var(--accent);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 18px;
+      font-weight: 500;
+      text-anchor: middle;
+    }
+
+    .task-title {
+      fill: var(--ink);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      text-anchor: middle;
+    }
+
+    .task-thumb { cursor: pointer; }
+    .task-thumb:hover .thumb-frame,
+    .task-thumb:focus-visible .thumb-frame { stroke-width: 2.5; }
+    .task-thumb:focus-visible { outline: none; }
+    .task-thumb.arriving { animation: thumb-arrive .62s cubic-bezier(.2,.8,.3,1); }
+
+    .chaos-window:nth-of-type(odd) { animation: pile-glitch-a 1.05s steps(4, end) infinite; }
+    .chaos-window:nth-of-type(even) { animation: pile-glitch-b 1.3s steps(5, end) infinite; }
+
+    @keyframes thumb-arrive {
+      0% { opacity: .12; transform: translate(-38px, 9px) scale(1.18); }
+      70% { opacity: 1; transform: translate(3px, -1px) scale(.98); }
+      100% { opacity: 1; transform: none; }
+    }
+    @keyframes pile-glitch-a {
+      0%, 100% { transform: translate(-2px, 1px) rotate(-.8deg); }
+      46% { transform: translate(3px, -2px) rotate(1.3deg); }
+      74% { transform: translate(-1px, 3px) rotate(-.4deg); }
+    }
+    @keyframes pile-glitch-b {
+      0%, 100% { transform: translate(2px, -2px) rotate(.9deg); }
+      38% { transform: translate(-3px, 2px) rotate(-1.1deg); }
+      72% { transform: translate(1px, 1px) rotate(.3deg); }
+    }
+
+    .datum-line {
+      fill: none;
+      stroke: var(--rule);
+      stroke-width: 1;
+      stroke-dasharray: 3 8;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .dimension-line {
+      fill: none;
+      stroke: color-mix(in srgb, var(--blueprint) 50%, transparent);
+      stroke-width: .75;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .gear-outline {
+      fill: color-mix(in srgb, var(--paper) 86%, transparent);
+      stroke: var(--blueprint);
+      stroke-width: 1.35;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .gear-ring, .gear-hub {
+      fill: none;
+      stroke: var(--blueprint);
+      stroke-width: 1;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .product-gear .gear-outline {
+      fill: var(--accent-soft);
+      stroke: var(--accent);
+      stroke-width: 1.7;
+    }
+
+    .product-gear .gear-ring,
+    .product-gear .gear-hub { stroke: var(--accent); }
+
+    .stage-label {
+      fill: var(--ink);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      text-anchor: middle;
+    }
+
+    .brand-label {
+      fill: var(--accent);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .02em;
+      text-anchor: middle;
+    }
+
+    .index-label {
+      fill: var(--muted);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 9px;
+      text-anchor: middle;
+    }
+
+    .gap-marker {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 1;
+      stroke-dasharray: 3 7;
+      opacity: 0;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .gap-cross {
+      stroke: var(--accent);
+      stroke-width: 1;
+      opacity: 0;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .mechanism,
+    .gap-marker,
+    .gap-cross {
+      transition: opacity 320ms ease;
+    }
+
+    .process-figure.with .rotor.clockwise { animation: spin-cw 15s linear infinite; }
+    .process-figure.with .rotor.counter { animation: spin-ccw 15s linear infinite; }
+
+    .process-figure.without .product-gear .mechanism { opacity: 0; }
+    .process-figure.without .product-gear .brand-label { opacity: 0; }
+    .process-figure.without .product-gear .gap-marker,
+    .process-figure.without .product-gear .gap-cross { opacity: .72; }
+    .process-figure.without .assembly:not(.product-gear) .mechanism {
+      filter: grayscale(1);
+      opacity: .58;
+    }
+    .process-figure.without .assembly:nth-of-type(1) .mechanism { transform: translate(-10px, -9px) rotate(-5deg); }
+    .process-figure.without .assembly:nth-of-type(2) .mechanism { transform: translate(7px, 12px) rotate(7deg); }
+    .process-figure.without .assembly:nth-of-type(5) .mechanism { transform: translate(-7px, 11px) rotate(-8deg); }
+    .process-figure.without .assembly:nth-of-type(6) .mechanism { transform: translate(10px, -8px) rotate(6deg); }
+    .process-figure.without .assembly:nth-of-type(odd) .jitter-shell { animation: grind-a 1.15s steps(4, end) infinite; }
+    .process-figure.without .assembly:nth-of-type(even) .jitter-shell { animation: grind-b 1.35s steps(5, end) infinite; }
+    .process-figure.without .rotor.clockwise { animation: stutter-cw 3.6s steps(7, end) infinite; }
+    .process-figure.without .rotor.counter { animation: stutter-ccw 4.1s steps(8, end) infinite; }
+
+    .process-figure.work-in-progress .assembly .mechanism {
+      filter: grayscale(1);
+      opacity: .68;
+    }
+    .process-figure.work-in-progress .assembly:nth-of-type(1) .mechanism { transform: translate(-11px, 8px) rotate(-6deg); }
+    .process-figure.work-in-progress .assembly:nth-of-type(2) .mechanism { transform: translate(8px, -12px) rotate(8deg); }
+    .process-figure.work-in-progress .assembly:nth-of-type(3) .mechanism { transform: translate(-5px, 13px) rotate(-5deg); }
+    .process-figure.work-in-progress .assembly:nth-of-type(4) .mechanism { transform: translate(12px, 5px) rotate(7deg); }
+    .process-figure.work-in-progress .assembly:nth-of-type(5) .mechanism { transform: translate(-9px, -8px) rotate(-8deg); }
+    .process-figure.work-in-progress .assembly:nth-of-type(6) .mechanism { transform: translate(7px, 11px) rotate(5deg); }
+    .process-figure.work-in-progress .assembly:nth-of-type(odd) .jitter-shell { animation: grind-a .9s steps(4, end) infinite; }
+    .process-figure.work-in-progress .assembly:nth-of-type(even) .jitter-shell { animation: grind-b 1.05s steps(5, end) infinite; }
+    .process-figure.work-in-progress .rotor.clockwise { animation: stutter-cw 3.1s steps(7, end) infinite; }
+    .process-figure.work-in-progress .rotor.counter { animation: stutter-ccw 3.4s steps(8, end) infinite; }
+    .process-figure.work-in-progress .product-gear .gap-marker,
+    .process-figure.work-in-progress .product-gear .gap-cross { opacity: .38; }
+
+    @keyframes spin-cw {
+      from { transform: rotate(var(--phase)); }
+      to { transform: rotate(calc(var(--phase) + 360deg)); }
+    }
+    @keyframes spin-ccw {
+      from { transform: rotate(var(--phase)); }
+      to { transform: rotate(calc(var(--phase) - 360deg)); }
+    }
+    @keyframes stutter-cw {
+      0% { transform: rotate(0deg); }
+      30% { transform: rotate(48deg); }
+      43% { transform: rotate(38deg); }
+      70% { transform: rotate(82deg); }
+      100% { transform: rotate(104deg); }
+    }
+    @keyframes stutter-ccw {
+      0% { transform: rotate(10deg); }
+      28% { transform: rotate(-32deg); }
+      41% { transform: rotate(-22deg); }
+      75% { transform: rotate(-70deg); }
+      100% { transform: rotate(-92deg); }
+    }
+    @keyframes grind-a {
+      0%, 100% { transform: translate(-2px, 1px) rotate(-1deg); }
+      45% { transform: translate(1px, -2px) rotate(1.2deg); }
+      70% { transform: translate(0, 2px) rotate(-.4deg); }
+    }
+    @keyframes grind-b {
+      0%, 100% { transform: translate(1px, -1px) rotate(.7deg); }
+      40% { transform: translate(-2px, 2px) rotate(-1.3deg); }
+      76% { transform: translate(2px, 0) rotate(.4deg); }
+    }
+
+    .rotor, .jitter-shell {
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    .figure-note {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 13px 0 17px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .figure-note span:first-child { max-width: 650px; }
+
+    .figure-key {
+      flex: 0 0 auto;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 10px;
+      letter-spacing: .03em;
+    }
+
+    .closing {
+      display: grid;
+      grid-template-columns: 110px minmax(0, 790px);
+      gap: 30px;
+      padding: 132px 0 148px;
+    }
+
+    .closing blockquote {
+      margin: 0;
+      font-family: "Source Serif 4", serif;
+      font-size: clamp(40px, 5.5vw, 68px);
+      font-weight: 500;
+      line-height: 1.04;
+      letter-spacing: -.04em;
+      text-wrap: balance;
+    }
+
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 28px 0 36px;
+      border-top: 1px solid var(--rule);
+      color: var(--muted);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+    }
+
     footer a {
-      font-weight: 750;
-      text-decoration-thickness: 1px;
-      text-underline-offset: 5px;
+      text-decoration-color: var(--rule);
+      text-underline-offset: 4px;
     }
-    footer a:hover { text-decoration-thickness: 2px; }
+
+    footer a:hover { color: var(--ink); }
 
     @media (max-width: 760px) {
-      .intro {
-        min-height: 58svh;
+      .page { width: min(100% - 32px, var(--max)); }
+      .masthead { padding-top: 22px; }
+      .hero {
         grid-template-columns: 1fr;
-        align-content: center;
-        padding: 32px 22px 74px;
+        gap: 42px;
+        min-height: auto;
+        padding: 78px 0 72px;
       }
-      .intro h1 { font-size: clamp(1.7rem, 8vw, 2.6rem); line-height: 1; max-width: 7ch; }
-      .intro-copy { align-self: auto; }
-      .cue { left: 22px; bottom: 25px; }
-      .doors-scroll { height: auto; }
-      .lineup-title {
-        position: relative;
-        top: auto;
-        left: auto;
-        margin: 0;
-        padding: 20px 22px 10px;
-        transform: none;
-        background: transparent;
-        white-space: normal;
-      }
-      .doors-stage {
-        position: relative;
-        height: auto;
-        min-height: 0;
-        padding: 10px;
-        display: grid;
+      h1 { font-size: clamp(42px, 13vw, 58px); }
+      .studio-line { max-width: 520px; }
+      .chapter,
+      .closing {
         grid-template-columns: 1fr;
-        gap: 10px;
-        overflow: visible;
+        gap: 24px;
       }
-      .door { min-height: 78svh; transform: none; }
-      .door-left, .door-right {
-        flex: none;
-        border-radius: 28px;
+      .chapter { padding: 82px 0 88px; }
+      .product-section { padding: 84px 0 96px; }
+      .product-intro {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        margin-bottom: 50px;
       }
-      .door-right { border-radius: 4px; }
-      .door-inner { padding: 28px 24px; }
-      .door-left h2 { font-size: clamp(1.8rem, 8vw, 2.7rem); line-height: .88; }
-      .door-right h2 { font-size: clamp(1.8rem, 8.5vw, 2.8rem); line-height: .94; }
-      .door-copy p { font-size: 1rem; }
-      .door-topline { font-size: .64rem; }
-      .seam { display: none; }
-      .paper-one { width: 70vw; right: -30%; }
-      .paper-two { width: 64vw; }
-      .axis { right: 24px; }
-      .closer { min-height: 78svh; padding: 78px 22px 28px; }
-      .closer-line { font-size: clamp(1.8rem, 9vw, 3rem); }
-      footer { align-items: flex-start; flex-direction: column; gap: 10px; }
+      .product-copy { padding-top: 0; }
+      .product-name { margin-bottom: 20px; }
+      .figure-head {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .toggle { align-self: stretch; }
+      .toggle button { min-width: 0; }
+      .gear-canvas { min-height: 420px; }
+      .figure-note { flex-direction: column; gap: 8px; }
+      .closing { padding: 95px 0 105px; }
+      footer {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
-      .door, .paper, .scan { transform: none !important; }
+      .rotor, .jitter-shell, .task-thumb, .chaos-window { animation: none !important; }
+      .mechanism, .gap-marker, .gap-cross { transition: none; }
     }
   </style>
 </head>
 <body>
-  <main>
-    <section class="intro" aria-labelledby="intro-title">
-      <h1 id="intro-title">Agentic coordination<br>you can tap into.</h1>
-      <div class="intro-copy">
-        <p>Memyr Labs builds products and agentic experiences that make the process flow easily.</p>
-      </div>
-      <div class="cue" aria-hidden="true">Explore the work</div>
-    </section>
+  <div class="page">
+    <header class="masthead">
+      <p class="wordmark">Memyr Labs</p>
+      <span class="folio">Product studio</span>
+    </header>
 
-    <section class="doors-scroll" aria-labelledby="lineup-title">
-      <h2 class="lineup-title" id="lineup-title">The current lineup</h2>
-      <div class="doors-stage" id="doors">
-        <a class="door door-left" href="https://gift8v2.vercel.app" target="_blank" rel="noopener noreferrer" aria-label="Open Gift8">
-          <span class="paper paper-one" aria-hidden="true"></span>
-          <span class="paper paper-two" aria-hidden="true"></span>
-          <span class="paper paper-three" aria-hidden="true"></span>
-          <div class="door-inner">
-            <div class="door-topline"><span class="door-label">Gift8</span><span class="door-no">01 / 02</span></div>
-            <div class="door-copy">
-              <h2>Group gifting,<br>automated.</h2>
-              <p>The consumer experience. A Gift8 API key works with Muse and other agents, such as Grok. The first handshake explains Gift8. Then Gift8 asks the agent for the details it needs.</p>
-            </div>
-            <div class="door-action"><span>Open Gift8</span><span class="arrow" aria-hidden="true">→</span></div>
+    <main>
+      <section class="hero" aria-labelledby="thesis">
+        <h1 id="thesis">Agentic coordination you can tap into.</h1>
+        <p class="studio-line">Memyr Labs builds products and agentic experiences that make the process flow easily.</p>
+      </section>
+
+      <section class="chapter problem" aria-labelledby="problem-title">
+        <div class="chapter-marker">01 / The gap</div>
+        <div>
+          <h2 id="problem-title">The work is rarely the problem.</h2>
+          <p class="lead">Everyday processes glitch in the space between one step and the next. One person has context. Another has the next task. Nobody owns the distance between them.</p>
+          <p>The pieces are there. The coordination is missing.</p>
+        </div>
+      </section>
+
+      <section class="product-section gift8" aria-labelledby="gift8-title">
+        <div class="product-intro">
+          <div>
+            <div class="product-name">Gift8</div>
+            <h2 id="gift8-title">Group gifting, automated.</h2>
           </div>
-        </a>
-
-        <a class="door door-right" href="https://notanats.com" target="_blank" rel="noopener noreferrer" aria-label="Open notanATS">
-          <span class="grid-field" aria-hidden="true"></span>
-          <span class="scan" aria-hidden="true"></span>
-          <span class="axis" aria-hidden="true"></span>
-          <div class="door-inner">
-            <div class="door-topline"><span class="door-label">notanATS</span><span class="door-no">02 / 02</span></div>
-            <div class="door-copy">
-              <h2>Screen for the experience you need to build your team.</h2>
-              <p>Screening infrastructure that your own agents and apps can tap into through the API.</p>
-            </div>
-            <div class="door-action"><span>Open notanATS</span><span class="arrow" aria-hidden="true">→</span></div>
+          <div class="product-copy">
+            <p>Gift8 is the consumer experience for group gifting. It keeps the occasion, contributions and next action moving together, without turning a group chat into a project plan.</p>
+            <p>A Gift8 API key works with Muse and other agents, such as Grok. The first handshake explains Gift8. Then Gift8 asks the agent for the details it needs. The person can stay in the conversation they already use.</p>
           </div>
-        </a>
-        <span class="seam" aria-hidden="true"></span>
-      </div>
-    </section>
+        </div>
 
-    <section class="closer" aria-label="Contact">
-      <p class="closer-line">We build better routes <span>by watching the whole maze.</span></p>
-      <footer>
-        <p>Questions, ideas, or a broken link.<br>Custom projects by referral only.</p>
-        <a href="mailto:support@memyr.com">support@memyr.com</a>
-      </footer>
-    </section>
-  </main>
+        <figure class="process-figure with" data-process="gift8" data-state="with">
+          <div class="figure-head">
+            <h3 class="figure-title">Figure 01 — The gifting chain</h3>
+            <div class="toggle" role="group" aria-label="Show the gifting process with or without Gift8">
+              <button type="button" data-state-button="without" aria-pressed="false">Without</button>
+              <button type="button" data-state-button="with" aria-pressed="true">With</button>
+            </div>
+          </div>
+          <svg class="gear-canvas" role="img" aria-labelledby="gift8-gear-title gift8-gear-desc">
+            <title id="gift8-gear-title">Gifting process gear chain</title>
+            <desc id="gift8-gear-desc">Six interlocking gears move from occasion to delivery. Gift8 coordinates the middle of the chain.</desc>
+          </svg>
+          <figcaption class="figure-note">
+            <span class="state-description" aria-live="polite">Every gear is engaged. The handoffs keep moving.</span>
+            <span class="figure-key">Occasion → Delivered</span>
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="product-section notanats" aria-labelledby="notanats-title">
+        <div class="product-intro">
+          <div>
+            <div class="product-name">notanATS</div>
+            <h2 id="notanats-title">Screen for the experience you need to build your team.</h2>
+          </div>
+          <div class="product-copy">
+            <p>notanATS is screening infrastructure. It holds the hiring manager’s definition of the work, screens applicants against it and moves the right people to the interview.</p>
+            <p>Your own agents and apps can tap into that process through the API. The screening layer becomes part of the system you already operate, rather than another queue someone has to watch.</p>
+          </div>
+        </div>
+
+        <figure class="process-figure without" data-process="notanats" data-state="without">
+          <div class="figure-head">
+            <h3 class="figure-title">Figure 02 — The hiring chain</h3>
+            <div class="toggle" role="group" aria-label="Show the hiring process with or without notanATS">
+              <button type="button" data-state-button="without" aria-pressed="true">Without</button>
+              <button type="button" data-state-button="with" aria-pressed="false">With</button>
+            </div>
+          </div>
+          <svg class="gear-canvas" role="img" aria-labelledby="notanats-gear-title notanats-gear-desc">
+            <title id="notanats-gear-title">Hiring process gear chain</title>
+            <desc id="notanats-gear-desc">Six gears move from posting a job to hiring. Without notanATS, the screen and advance gears are missing and the chain grinds out of alignment.</desc>
+          </svg>
+          <figcaption class="figure-note">
+            <span class="state-description" aria-live="polite">The coordination gears are missing. The handoffs lose alignment.</span>
+            <span class="figure-key">Post → Hire</span>
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="product-section foculet" aria-labelledby="foculet-title">
+        <div class="product-intro">
+          <div>
+            <div class="product-name">
+              <span>Foculet</span>
+              <a class="source-link" href="https://github.com/dt-memyrlabs/foculet" target="_blank" rel="noopener noreferrer">Open source ↗</a>
+            </div>
+            <h2 id="foculet-title">Let’s be honest: tabs and multiple monitors cause more chaos than they fix. Foculet parks what you’re not using, so it’s there when you need it.</h2>
+          </div>
+          <div class="product-copy">
+            <p>Foculet is a Windows app with a Chrome extension. The moment you switch away from a window, it takes a snapshot and parks it as a thumbnail on your spare monitor. Click the thumbnail and the window goes back exactly where it was.</p>
+            <p>Chrome tabs park with a hotkey. You choose which apps never get parked. Everything stays local on your machine. No cloud. No account.</p>
+          </div>
+        </div>
+
+        <figure class="process-figure with" data-process="foculet" data-state="with">
+          <div class="figure-head">
+            <h3 class="figure-title">Figure 03 — The two-monitor loop</h3>
+            <div class="toggle" role="group" aria-label="Show the focus process with or without Foculet">
+              <button type="button" data-state-button="without" aria-pressed="false">Without</button>
+              <button type="button" data-state-button="with" aria-pressed="true">With</button>
+            </div>
+          </div>
+          <svg class="gear-canvas foculet-canvas" role="img" aria-labelledby="foculet-monitor-title foculet-monitor-desc">
+            <title id="foculet-monitor-title">Foculet two-monitor parking loop</title>
+            <desc id="foculet-monitor-desc">A main monitor switches between numbered tasks while switched-away tasks become numbered thumbnails on a dump monitor. Selecting a thumbnail restores it to the main monitor.</desc>
+          </svg>
+          <figcaption class="figure-note">
+            <span class="state-description" aria-live="polite">Switched-away tasks park on the dump monitor. A click brings one back.</span>
+            <span class="figure-key">Switch → Park → Restore</span>
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="product-section musechrome" aria-labelledby="musechrome-title">
+        <div class="product-intro">
+          <div>
+            <div class="product-name">
+              <span>Muse for Chrome</span>
+              <span class="status-label">In the works</span>
+            </div>
+            <h2 id="musechrome-title">Let Muse work with the tab you already have open.</h2>
+          </div>
+          <div class="product-copy">
+            <p>This Chrome extension gives a Muse chat access to a browser tab when it needs one. The chat asks. Chrome notifies you. You click the extension icon and choose to hand the tab over.</p>
+            <p>Then Muse and the browser can work together. It is the same basic idea as Claude in Chrome, built for Muse. The handoff is not finished yet.</p>
+          </div>
+        </div>
+
+        <figure class="process-figure work-in-progress" data-process="musechrome" data-state="unfinished">
+          <div class="figure-head">
+            <h3 class="figure-title">Figure 04 — The tab-sharing chain</h3>
+            <span class="figure-key">In the works</span>
+          </div>
+          <svg class="gear-canvas" role="img" aria-labelledby="musechrome-gear-title musechrome-gear-desc">
+            <title id="musechrome-gear-title">Muse browser tab-sharing process gear chain</title>
+            <desc id="musechrome-gear-desc">Six misaligned, jittering gears move from a Muse chat asking for a tab to Muse and the browser working together. The unfinished chain remains in a broken state.</desc>
+          </svg>
+          <figcaption class="figure-note">
+            <span>The handoff is still being built. For now, the chain stays out of alignment.</span>
+            <span class="figure-key">Chat → Working together</span>
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="closing" aria-labelledby="closing-line">
+        <div class="chapter-marker">The view</div>
+        <blockquote id="closing-line">We build better routes by watching the whole maze.</blockquote>
+      </section>
+    </main>
+
+    <footer>
+      <a href="mailto:support@memyr.com">support@memyr.com</a>
+      <span>Custom projects by referral only.</span>
+    </footer>
+  </div>
 
   <script>
     (function () {
-      var section = document.querySelector('.doors-scroll');
-      var stage = document.getElementById('doors');
-      var left = document.querySelector('.door-left');
-      var right = document.querySelector('.door-right');
-      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-      var raf = 0;
+      var NS = "http://www.w3.org/2000/svg";
+      var configs = {
+        gift8: {
+          stages: ["Occasion", "Contributions", "Coordinate", "Collect", "Purchase", "Delivered"],
+          products: [2, 3],
+          brand: "Gift8",
+          desktop: {
+            start: [184, 160],
+            pitch: [56, 70, 48, 66, 52, 60],
+            angles: [-25, 52, -50, 31, -19]
+          },
+          mobile: {
+            start: [100, 70],
+            pitch: [40, 52, 36, 48, 42, 46],
+            angles: [20, 75, 140, 55, 155]
+          }
+        },
+        notanats: {
+          stages: ["Post", "Applicants", "Screen", "Advance", "Interview", "Hire"],
+          products: [2, 3],
+          brand: "notanATS",
+          desktop: {
+            start: [195, 126],
+            pitch: [68, 46, 58, 42, 72, 50],
+            angles: [34, -47, 63, -35, 18]
+          },
+          mobile: {
+            start: [100, 80],
+            pitch: [50, 36, 44, 40, 54, 38],
+            angles: [28, 104, 32, 135, 16]
+          }
+        },
+        foculet: {
+          stages: ["Ping", "Switch", "Park", "Board", "Click", "Resume"],
+          products: [2, 3],
+          brand: "Foculet",
+          withDescription: "Switched-away tasks park on the dump monitor. A click brings one back.",
+          withoutDescription: "On one screen, switched-away windows collapse into a messy pile.",
+          desktop: {
+            start: [176, 172],
+            pitch: [48, 66, 54, 70, 46, 60],
+            angles: [-31, 58, -54, 39, -17]
+          },
+          mobile: {
+            start: [104, 76],
+            pitch: [40, 54, 44, 52, 38, 48],
+            angles: [36, 118, 42, 142, 24]
+          }
+        },
+        musechrome: {
+          stages: ["Chat", "Ask", "Notify", "Click", "Tab shared", "Working together"],
+          products: [2, 3, 4],
+          brand: "Muse + Chrome",
+          desktop: {
+            start: [184, 148],
+            pitch: [54, 44, 60, 48, 56, 46],
+            angles: [38, -51, 69, -34, 23]
+          },
+          mobile: {
+            start: [104, 74],
+            pitch: [42, 34, 46, 38, 44, 36],
+            angles: [31, 112, 46, 137, 19]
+          }
+        }
+      };
 
-      function update() {
-        raf = 0;
-        if (window.innerWidth <= 760 || reduce.matches) {
-          stage.style.removeProperty('--split');
-          stage.style.removeProperty('--progress');
-          stage.style.removeProperty('--scene-pad');
-          stage.style.removeProperty('--door-gap');
+      function svgEl(name, attrs, text) {
+        var node = document.createElementNS(NS, name);
+        Object.keys(attrs || {}).forEach(function (key) { node.setAttribute(key, attrs[key]); });
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+
+      function gearPath(teeth, rootRadius, outerRadius) {
+        var points = [];
+        var steps = teeth * 4;
+        for (var i = 0; i < steps; i++) {
+          var phase = i % 4;
+          var radius = (phase === 1 || phase === 2) ? outerRadius : rootRadius;
+          var angle = -Math.PI / 2 + (Math.PI * 2 * i / steps);
+          points.push((i === 0 ? "M" : "L") +
+            (Math.cos(angle) * radius).toFixed(2) + " " +
+            (Math.sin(angle) * radius).toFixed(2));
+        }
+        return points.join(" ") + " Z";
+      }
+
+      function layoutChain(spec) {
+        var firstTeeth = spec.pitch[0] / 2;
+        var gears = [{ x: spec.start[0], y: spec.start[1], pitch: spec.pitch[0], teeth: firstTeeth, phase: 0 }];
+        for (var i = 1; i < spec.pitch.length; i++) {
+          var previous = gears[i - 1];
+          var desiredAngle = spec.angles[i - 1] * Math.PI / 180;
+          var parentToothBase = -Math.PI / 2 + 3 * Math.PI / (4 * previous.teeth);
+          var parentPitch = Math.PI * 2 / previous.teeth;
+          var toothIndex = Math.round((desiredAngle - previous.phase - parentToothBase) / parentPitch);
+          var angle = previous.phase + parentToothBase + toothIndex * parentPitch;
+          var distance = spec.pitch[i - 1] + spec.pitch[i];
+          var teeth = spec.pitch[i] / 2;
+          var childGapBase = -Math.PI / 2 + 7 * Math.PI / (4 * teeth);
+          gears.push({
+            x: previous.x + Math.cos(angle) * distance,
+            y: previous.y + Math.sin(angle) * distance,
+            pitch: spec.pitch[i],
+            teeth: teeth,
+            phase: angle + Math.PI - childGapBase
+          });
+        }
+        return gears;
+      }
+
+      function makeMechanism(isProduct, direction, pitchRadius, teeth, phase) {
+        var mechanism = svgEl("g", { "class": "mechanism" });
+        var shell = svgEl("g", { "class": "jitter-shell" });
+        var outerRadius = pitchRadius + 4;
+        var duration = (15 * teeth / 28).toFixed(2) + "s";
+        var rotor = svgEl("g", {
+          "class": "rotor " + direction,
+          style: "--phase:" + (phase * 180 / Math.PI).toFixed(3) + "deg;animation-duration:" + duration
+        });
+        rotor.appendChild(svgEl("path", { "class": "gear-outline", d: gearPath(teeth, pitchRadius - 4, outerRadius) }));
+        rotor.appendChild(svgEl("circle", { "class": "gear-ring", cx: 0, cy: 0, r: (pitchRadius * .64).toFixed(2) }));
+        for (var spoke = 0; spoke < 6; spoke++) {
+          var a = Math.PI * 2 * spoke / 6;
+          rotor.appendChild(svgEl("line", {
+            "class": "gear-ring",
+            x1: (Math.cos(a) * pitchRadius * .24).toFixed(2),
+            y1: (Math.sin(a) * pitchRadius * .24).toFixed(2),
+            x2: (Math.cos(a) * pitchRadius * .58).toFixed(2),
+            y2: (Math.sin(a) * pitchRadius * .58).toFixed(2)
+          }));
+        }
+        rotor.appendChild(svgEl("circle", { "class": "gear-hub", cx: 0, cy: 0, r: (pitchRadius * .2).toFixed(2) }));
+        shell.appendChild(rotor);
+        mechanism.appendChild(shell);
+        return mechanism;
+      }
+
+      function renderFoculetFigure(figure, arrivingTask) {
+        var svg = figure.querySelector("svg");
+        var isMobile = window.innerWidth <= 600;
+        var isWith = figure.getAttribute("data-state") === "with";
+        var tasks = [1, 2, 3, 4];
+
+        if (figure._foculetTimer) {
+          window.clearTimeout(figure._foculetTimer);
+          figure._foculetTimer = null;
+        }
+
+        while (svg.lastChild && svg.lastChild.nodeName.toLowerCase() !== "desc") {
+          svg.removeChild(svg.lastChild);
+        }
+
+        svg.setAttribute("viewBox", isMobile ? "0 0 400 430" : "0 0 1000 360");
+        svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
+        function drawMonitor(x, y, width, height, label) {
+          var group = svgEl("g", {});
+          group.appendChild(svgEl("rect", { "class": "monitor-frame", x: x, y: y, width: width, height: height, rx: 5 }));
+          group.appendChild(svgEl("rect", { "class": "monitor-screen", x: x + 11, y: y + 11, width: width - 22, height: height - 30, rx: 2 }));
+          group.appendChild(svgEl("line", { "class": "monitor-stand", x1: x + width / 2, y1: y + height, x2: x + width / 2, y2: y + height + 27 }));
+          group.appendChild(svgEl("line", { "class": "monitor-base", x1: x + width / 2 - 34, y1: y + height + 27, x2: x + width / 2 + 34, y2: y + height + 27 }));
+          group.appendChild(svgEl("text", { "class": "monitor-label", x: x + width / 2, y: y + height + 49 }, label));
+          svg.appendChild(group);
+        }
+
+        function drawTaskWindow(parent, x, y, width, height, task, compact) {
+          parent.appendChild(svgEl("rect", { "class": compact ? "thumb-frame" : "task-window", x: x, y: y, width: width, height: height, rx: 2 }));
+          parent.appendChild(svgEl("rect", { "class": compact ? "thumb-header" : "task-window-header", x: x, y: y, width: width, height: compact ? 10 : 16, rx: 2 }));
+          parent.appendChild(svgEl("text", { "class": "task-number", x: x + width / 2, y: y + height / 2 + (compact ? 7 : 9) }, String(task)));
+          if (!compact) parent.appendChild(svgEl("text", { "class": "task-title", x: x + width / 2, y: y + height - 18 }, "Task " + task));
+        }
+
+        if (!isWith) {
+          var single = isMobile
+            ? { x: 34, y: 77, w: 332, h: 245 }
+            : { x: 180, y: 44, w: 640, h: 230 };
+          drawMonitor(single.x, single.y, single.w, single.h, "One monitor");
+          var pile = isMobile
+            ? [[58, 118, 236, 128, -5], [91, 142, 224, 126, 7], [49, 164, 238, 128, -8], [106, 184, 218, 118, 5]]
+            : [[235, 82, 360, 142, -5], [302, 105, 350, 140, 7], [215, 123, 370, 140, -8], [335, 139, 330, 126, 5]];
+          pile.forEach(function (item, index) {
+            var shell = svgEl("g", { transform: "translate(" + item[0] + " " + item[1] + ") rotate(" + item[4] + " " + item[2] / 2 + " " + item[3] / 2 + ")" });
+            var windowGroup = svgEl("g", { "class": "chaos-window" });
+            drawTaskWindow(windowGroup, 0, 0, item[2], item[3], index + 1, false);
+            shell.appendChild(windowGroup);
+            svg.appendChild(shell);
+          });
+          svg.appendChild(svgEl("text", { "class": "task-caption", x: isMobile ? 200 : 500, y: isMobile ? 397 : 342 }, "Switch away. Hunt for it again."));
           return;
         }
-        var rect = section.getBoundingClientRect();
-        var span = Math.max(1, section.offsetHeight - window.innerHeight);
-        var progress = Math.max(0, Math.min(1, -rect.top / span));
-        var shift = Math.sin(progress * Math.PI * 2) * 7;
-        stage.style.setProperty('--progress', progress.toFixed(4));
-        if (!stage.dataset.hover) stage.style.setProperty('--split', (50 + shift).toFixed(2) + '%');
-        stage.style.setProperty('--scene-pad', (18 * (1 - progress)).toFixed(2) + 'px');
-        stage.style.setProperty('--door-gap', (18 - 12 * progress).toFixed(2) + 'px');
-        left.style.setProperty('--lift', (-12 * Math.sin(progress * Math.PI)).toFixed(2) + 'px');
-        right.style.setProperty('--lift', (12 * Math.sin(progress * Math.PI)).toFixed(2) + 'px');
+
+        if (!figure._foculetState) {
+          figure._foculetState = { active: 3, parked: [1, 2], next: 4 };
+        }
+        var state = figure._foculetState;
+        var main = isMobile
+          ? { x: 18, y: 88, w: 170, h: 190 }
+          : { x: 70, y: 48, w: 382, h: 230 };
+        var dump = isMobile
+          ? { x: 212, y: 88, w: 170, h: 190 }
+          : { x: 548, y: 48, w: 382, h: 230 };
+
+        drawMonitor(main.x, main.y, main.w, main.h, "Main monitor");
+        drawMonitor(dump.x, dump.y, dump.w, dump.h, "Dump monitor");
+        svg.appendChild(svgEl("path", {
+          "class": "parking-route",
+          d: "M" + (main.x + main.w + 10) + " " + (main.y + main.h * .48) + " L" + (dump.x - 10) + " " + (dump.y + dump.h * .48)
+        }));
+
+        var activeGroup = svgEl("g", {});
+        drawTaskWindow(activeGroup, main.x + 25, main.y + 29, main.w - 50, main.h - 76, state.active, false);
+        svg.appendChild(activeGroup);
+
+        var columns = 2;
+        var gap = isMobile ? 7 : 14;
+        var thumbW = (dump.w - 44 - gap) / 2;
+        var thumbH = isMobile ? 55 : 68;
+        state.parked.slice(-4).forEach(function (task, index) {
+          var col = index % columns;
+          var row = Math.floor(index / columns);
+          var x = dump.x + 22 + col * (thumbW + gap);
+          var y = dump.y + 29 + row * (thumbH + gap);
+          var thumb = svgEl("g", {
+            "class": "task-thumb" + (task === arrivingTask ? " arriving" : ""),
+            role: "button",
+            tabindex: "0",
+            "aria-label": "Restore task " + task + " to the main monitor"
+          });
+          drawTaskWindow(thumb, x, y, thumbW, thumbH, task, true);
+          function restore() {
+            var previous = state.active;
+            state.parked = state.parked.filter(function (number) { return number !== task; });
+            state.parked.push(previous);
+            state.active = task;
+            state.next = tasks[(tasks.indexOf(task) + 1) % tasks.length];
+            renderFoculetFigure(figure, previous);
+          }
+          thumb.addEventListener("click", restore);
+          thumb.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              restore();
+            }
+          });
+          svg.appendChild(thumb);
+        });
+
+        svg.appendChild(svgEl("text", { "class": "task-caption", x: isMobile ? 200 : 500, y: isMobile ? 397 : 342 }, "Switch. Park. Click to restore."));
+
+        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          figure._foculetTimer = window.setTimeout(function () {
+            var outgoing = state.active;
+            var incoming = state.next;
+            state.parked = state.parked.filter(function (number) { return number !== incoming; });
+            state.parked.push(outgoing);
+            if (state.parked.length > 4) state.parked.shift();
+            state.active = incoming;
+            state.next = tasks[(tasks.indexOf(incoming) + 1) % tasks.length];
+            renderFoculetFigure(figure, outgoing);
+          }, 2600);
+        }
       }
 
-      function requestUpdate() {
-        if (!raf) raf = requestAnimationFrame(update);
+      function renderFigure(figure) {
+        var svg = figure.querySelector("svg");
+        var key = figure.getAttribute("data-process");
+        var config = configs[key];
+        if (key === "foculet") {
+          renderFoculetFigure(figure);
+          return;
+        }
+        var isMobile = window.innerWidth <= 600;
+        var gears = layoutChain(isMobile ? config.mobile : config.desktop);
+
+        while (svg.lastChild && svg.lastChild.nodeName.toLowerCase() !== "desc") {
+          svg.removeChild(svg.lastChild);
+        }
+
+        svg.setAttribute("viewBox", isMobile ? "0 0 400 400" : "0 0 1000 330");
+        svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
+        var datum = svgEl("path", { "class": "datum-line" });
+        var d = "M" + gears[0].x + " " + gears[0].y;
+        gears.slice(1).forEach(function (gear) { d += " L" + gear.x + " " + gear.y; });
+        datum.setAttribute("d", d);
+        svg.appendChild(datum);
+
+        gears.forEach(function (gear, index) {
+          var isProduct = config.products.indexOf(index) !== -1;
+          var crossSize = Math.max(12, gear.pitch * .3);
+          var assembly = svgEl("g", {
+            "class": "assembly" + (isProduct ? " product-gear" : ""),
+            transform: "translate(" + gear.x + " " + gear.y + ")"
+          });
+          assembly.appendChild(makeMechanism(isProduct, index % 2 === 0 ? "clockwise" : "counter", gear.pitch, gear.teeth, gear.phase));
+          assembly.appendChild(svgEl("circle", { "class": "gap-marker", cx: 0, cy: 0, r: gear.pitch + 1 }));
+          assembly.appendChild(svgEl("line", { "class": "gap-cross", x1: -crossSize, y1: -crossSize, x2: crossSize, y2: crossSize }));
+          assembly.appendChild(svgEl("line", { "class": "gap-cross", x1: crossSize, y1: -crossSize, x2: -crossSize, y2: crossSize }));
+
+          if (isMobile) {
+            assembly.appendChild(svgEl("text", { "class": "stage-label", x: 0, y: isProduct ? -2 : 5 }, config.stages[index]));
+            if (isProduct) assembly.appendChild(svgEl("text", { "class": "brand-label", x: 0, y: 14 }, config.brand));
+          } else {
+            var labelX = 150 + index * 140;
+            var localLabelX = labelX - gear.x;
+            var indexY = 282 - gear.y;
+            var stageY = 305 - gear.y;
+            assembly.appendChild(svgEl("line", { "class": "dimension-line", x1: 0, y1: gear.pitch + 6, x2: localLabelX, y2: indexY - 12 }));
+            assembly.appendChild(svgEl("text", { "class": "index-label", x: localLabelX, y: indexY }, "0" + (index + 1)));
+            assembly.appendChild(svgEl("text", { "class": "stage-label", x: localLabelX, y: stageY }, config.stages[index]));
+            if (isProduct) assembly.appendChild(svgEl("text", { "class": "brand-label", x: 0, y: 4 }, config.brand));
+          }
+          svg.appendChild(assembly);
+        });
       }
 
-      left.addEventListener('mouseenter', function () { stage.dataset.hover = 'left'; stage.style.removeProperty('--split'); });
-      right.addEventListener('mouseenter', function () { stage.dataset.hover = 'right'; stage.style.removeProperty('--split'); });
-      stage.addEventListener('mouseleave', function () { delete stage.dataset.hover; requestUpdate(); });
-      left.addEventListener('focus', function () { stage.dataset.hover = 'left'; });
-      right.addEventListener('focus', function () { stage.dataset.hover = 'right'; });
-      stage.addEventListener('focusout', function (event) {
-        if (!stage.contains(event.relatedTarget)) { delete stage.dataset.hover; requestUpdate(); }
+      function setState(figure, state) {
+        var isWith = state === "with";
+        figure.setAttribute("data-state", state);
+        figure.classList.toggle("with", isWith);
+        figure.classList.toggle("without", !isWith);
+        figure.querySelectorAll("[data-state-button]").forEach(function (button) {
+          button.setAttribute("aria-pressed", String(button.getAttribute("data-state-button") === state));
+        });
+        var description = figure.querySelector(".state-description");
+        var config = configs[figure.getAttribute("data-process")];
+        description.textContent = isWith
+          ? (config.withDescription || "Every gear is engaged. The handoffs keep moving.")
+          : (config.withoutDescription || "The coordination gears are missing. The handoffs lose alignment.");
+        if (figure.getAttribute("data-process") === "foculet") renderFoculetFigure(figure);
+      }
+
+      var figures = Array.prototype.slice.call(document.querySelectorAll(".process-figure"));
+      figures.forEach(function (figure) {
+        renderFigure(figure);
+        figure.querySelectorAll("[data-state-button]").forEach(function (button) {
+          button.addEventListener("click", function () {
+            setState(figure, button.getAttribute("data-state-button"));
+          });
+        });
       });
-      window.addEventListener('scroll', requestUpdate, { passive: true });
-      window.addEventListener('resize', requestUpdate);
-      if (reduce.addEventListener) reduce.addEventListener('change', requestUpdate);
-      update();
+
+      var lastMode = window.innerWidth <= 600;
+      window.addEventListener("resize", function () {
+        var nextMode = window.innerWidth <= 600;
+        if (nextMode !== lastMode) {
+          lastMode = nextMode;
+          figures.forEach(renderFigure);
+        }
+      });
     }());
   </script>
 </body>
